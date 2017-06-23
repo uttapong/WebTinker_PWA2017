@@ -3,15 +3,15 @@
    <v-app id="helpmepets">
     <v-toolbar class="transparent elevation-0"  >
     
-    <v-toolbar-title class="text-center">Help Me Pets</v-toolbar-title>
+    <v-toolbar-title class="text-center" >Help Me Pets</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon>
+    <v-btn icon @click.native="gotoHome">
       <v-icon>account_circle</v-icon>
     </v-btn>
     <v-btn icon>
       <v-icon>add_circle</v-icon>
     </v-btn>
-    <v-btn icon>
+    <v-btn icon @click.native="gotoAddNewPets">
       <v-icon>plus</v-icon>
     </v-btn>
   </v-toolbar>
@@ -32,7 +32,19 @@ import Navigation from '@/components/Navigation'
 // import '../src/assets/img/bg.png'
 export default {
   name: 'app',
-  components: { Navigation }
+  components: { Navigation },
+  methods: {
+    gotoAddNewPets: function () {
+      console.log('gotoAddNewPets');
+      // var router = new VueRouter() ;
+      // router.go('/');
+      this.$router.push('/regispets');
+    },
+    gotoHome: function () {
+      console.log('gotoHome');
+      this.$router.push('/');
+    }
+  }
 }
 </script>
 

@@ -1,14 +1,8 @@
 <template>
 <div id="nearby">
-  <div id="gmap"></div>
-
-
+  <div id="map"></div>
 </div>
 </template>
-
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw&callback=initMap">
-</script>
 <script>
 
 function initMap() {
@@ -26,24 +20,72 @@ export default {
         }
   },
   created: function(){
-    this.getCurrentLocation()
+    this.getCurrentLocation();
+    this.initialMap();
   },
+
   methods: {
-    initMap: function(){
-        console.log("heloo fuck")
+    initialMap: function(){
+      // Google API url segments
+      this.map_lib = 'https://maps.googleapis.com/maps/api/js?key=';
+      this.map_key = 'AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw';
+      this.map_callback = '&callback=initMap';
+
+      // Googleapi callback
+      window.initMap = () => {
+          // Trigger an event on the vm instance
+          this.makeMap()
+      };
+
+      // Add the script to the window object
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = this.map_lib + this.map_key + this.map_callback;
+      document.body.appendChild(script);
+    },
+
+    makeMap: function(pos){
+      var map = new google.maps.Map(document.getElementById('map'), {
+          center: pos,
+          zoom: 17
+        });
+
+      var infoWindow = new google.maps.InfoWindow;
+      // console.log("markers ", this.markers)
+      // this.markers.forEach((marker) => {
+      //   this.addMarker(map, pos, marker.title, marker.iconURL, marker.contentString);
+      // })
+    },
+
+    addMarker: function(map, position, title, iconURL, contentString) {
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          title: title,
+          icon: iconURL
+          // shape: shape,
+        });
+
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
     },
 
     getCurrentLocation: function(){
       // Try HTML5 geolocation.
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
+          navigator.geolocation.getCurrentPosition((position) => {
             var pos = {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
 
-            console.log('position', pos)
-          }, function() {
+            this.makeMap(pos);
+            console.log('position', pos);
+          }, () => {
             this.handleLocationError(true, infoWindow, map.getCenter());
           });
         } else {
@@ -54,7 +96,8 @@ export default {
 
     handleLocationError: function(browserHasGeolocation, infoWindow, pos) {
         // default position.
-        console.log("handleLocationError")
+        console.log("handleLocationError");
+        self.makeMap({lat: 13.770626, lng: 100.5760677})
       }
 
   }
@@ -85,7 +128,8 @@ export default {
   /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      height: 100%;
+      height: 700px;
+      width: 100%;
     }
     /* Optional: Makes the sample page fill the window. */
     html, body {

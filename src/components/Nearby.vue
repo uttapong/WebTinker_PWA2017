@@ -53,7 +53,7 @@ export default {
       var infoWindow = new google.maps.InfoWindow;
       // console.log("markers ", this.markers)
 
-      this.makeMarkers(map)
+      this.makeMarkers(map);
       // this.markers.forEach((marker) => {
       //   this.addMarker(map, pos, marker.title, marker.iconURL, marker.contentString);
       // })

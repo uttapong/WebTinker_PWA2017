@@ -4,11 +4,7 @@
 </div>
 </template>
 <script>
-
-function initMap() {
-  alert("test")
-}
-
+import {firebase} from '../assets/js/FirebaseConfig'
 export default {
   name: 'nearby',
   data () {
@@ -34,7 +30,7 @@ export default {
       // Googleapi callback
       window.initMap = () => {
           // Trigger an event on the vm instance
-          this.makeMap()
+          this.makeMap();
       };
 
       // Add the script to the window object
@@ -53,10 +49,7 @@ export default {
       var infoWindow = new google.maps.InfoWindow;
       // console.log("markers ", this.markers)
 
-      this.makeMarkers(map)
-      // this.markers.forEach((marker) => {
-      //   this.addMarker(map, pos, marker.title, marker.iconURL, marker.contentString);
-      // })
+      this.makeMarkers(map);
     },
 
     makeMarkers: function(map) {
@@ -82,68 +75,87 @@ export default {
           '(last visited June 22, 2009).</p>'+
           '</div>'+
           '</div>';
-      let markers = [
-          { 
-            position: {
-              lat: 13.770626, 
-              lng: 100.5760677, 
-            },
-            title: "cat1", 
-            type: "cat", 
-            contentString: contentString,
-            iconURL: catIconURL
-          },
-          {
-            position: {
-              lat: 13.770131,
-              lng: 100.574055
-            },
-            title: "dog1",
-            type: "dog",
-            contentString: contentString,
-            iconURL: dogIconURL
-          },
-          {
-            position: {
-              lat: 13.773086,
-              lng: 100.572306
-            },
-            title: "dog2",
-            type: "dog",
-            contentString: contentString,
-            iconURL: dogIconURL
-          },
-          { 
-            position: {
-              lat: 13.771054, 
-              lng: 100.572451
-            },
-            title: "cat1", 
-            type: "cat", 
-            contentString: contentString,
-            iconURL: catIconURL
-          },
-          {
-            position: {
-              lat: 13.769783,
-              lng: 100.571904
-            },
-            title: "dog3",
-            type: "dog",
-            contentString: contentString,
-            iconURL: dogIconURL
-          }
-        ];
 
-        console.log("markers ", markers);
+      let listener = firebase.database().ref("helpmepetstemp");
+      listener
+         .on('child_added', (snapshot) => {
+            let value = snapshot.val();
+            let marker = { 
+              position: {
+                lat: value.latitude, 
+                lng: value.longitude, 
+              },
+              title: "", 
+              type: value.type,
+              contentString: contentString,
+              iconURL: catIconURL
+            }
+            console.log("marker ", marker);
+            this.addMarker(map, marker.position, marker.title, marker.type, marker.contentString);
+         });
 
-        markers.forEach((marker) => {
-          console.log("marker ", marker);
-          this.addMarker(map, marker.position, marker.title, marker.iconURL, marker.contentString);
-        });
+      // let markers = [
+      //     { 
+      //       position: {
+      //         lat: 13.770626, 
+      //         lng: 100.5760677, 
+      //       },
+      //       title: "cat1", 
+      //       type: "cat", 
+      //       contentString: contentString,
+      //       iconURL: catIconURL
+      //     },
+      //     {
+      //       position: {
+      //         lat: 13.770131,
+      //         lng: 100.574055
+      //       },
+      //       title: "dog1",
+      //       type: "dog",
+      //       contentString: contentString,
+      //       iconURL: dogIconURL
+      //     },
+      //     {
+      //       position: {
+      //         lat: 13.773086,
+      //         lng: 100.572306
+      //       },
+      //       title: "dog2",
+      //       type: "dog",
+      //       contentString: contentString,
+      //       iconURL: dogIconURL
+      //     },
+      //     { 
+      //       position: {
+      //         lat: 13.771054, 
+      //         lng: 100.572451
+      //       },
+      //       title: "cat1", 
+      //       type: "cat", 
+      //       contentString: contentString,
+      //       iconURL: catIconURL
+      //     },
+      //     {
+      //       position: {
+      //         lat: 13.769783,
+      //         lng: 100.571904
+      //       },
+      //       title: "dog3",
+      //       type: "dog",
+      //       contentString: contentString,
+      //       iconURL: dogIconURL
+      //     }
+      //   ];
+
+      //   console.log("markers ", markers);
+
+      //   markers.forEach((marker) => {
+      //     console.log("marker ", marker);
+      //     this.addMarker(map, marker.position, marker.title, marker.iconURL, marker.contentString);
+      //   });
     },
 
-    addMarker: function(map, position, title, iconURL, contentString) {
+    addMarker: function(map, position, title, type, contentString) {
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
@@ -151,12 +163,19 @@ export default {
           position: position,
           map: map,
           title: title,
-          icon: iconURL
+          icon: this.getIconURL(type)
         });
 
         marker.addListener('click', function() {
           infowindow.open(map, marker);
         });
+    },
+
+    getIconURL: function(type) {
+      if (type.toLowerCase() === "cat") {
+        return "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/cat-marker.png?alt=media&token=2903f888-50d3-49e8-8d85-cab61d8ea3cd";
+      }
+      return "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/dog-marker.png?alt=media&token=af45219c-6a27-4b53-9a1f-7b754b849346";
     },
 
     getCurrentLocation: function(){

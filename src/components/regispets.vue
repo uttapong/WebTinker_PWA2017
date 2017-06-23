@@ -85,6 +85,7 @@ export default {
         ],
     }
   },
+
   created: function(){
    
   },
@@ -93,12 +94,12 @@ export default {
       console.log('Avatar:')
     },
     submitform: function () {
-      console.log('Submit')
-      console.log(this.detail)
-      console.log(this.selectType)
+      console.log('Submit');
+      console.log(this.detail);
+      console.log(this.selectType);
       
-      console.log('**********************')
-      let postData = {}
+      console.log('**********************');
+      let postData = {};
       postData = {
           detail: this.detail,
           type: this.selectType,

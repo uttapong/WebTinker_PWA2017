@@ -15,8 +15,19 @@
   },
   "dependencies": {
     "firebase": "^4.1.3",
+<<<<<<< HEAD
+=======
+    "moment": "^2.18.1",
+    "vee-validate": "^2.0.0-rc.6",
+>>>>>>> beca070f1ee3089cd92df1334c86d5614c15c966
     "vue": "^2.3.3",
-    "vue-router": "^2.3.1"
+    "vue-router": "^2.3.1",
+    "vue-spinner": "^1.0.2",
+    "vue-sweetalert": "^0.1.17",
+    "vuefire": "^1.4.3",
+    "vuetify": "^0.12.7",
+    "vuex": "^2.3.1",
+    "vuex-persistedstate": "^1.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

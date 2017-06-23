@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import Nearby from '@/components/Nearby'
+import Splash from '@/components/Splash'
+import regispets from '@/components/regispets'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {path: '/splash', name: 'Splash', component: Splash},
+    {path: '/', component: Nearby, props: true, name: 'Nearby'},
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: '/regispets', name: 'Resgister', component: regispets
     }
   ]
 })

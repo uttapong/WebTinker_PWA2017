@@ -6,6 +6,7 @@ import router from './router'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import store from './vuex/store'
+import {firebase} from './assets/js/FirebaseConfig'
 
 Vue.use(Vuetify)
 Vue.use(Vuex)
@@ -29,24 +30,13 @@ new Vue({
   },
   methods: {
     processUser (authed) {
+      // console.log(authed)
       if (authed === null) {
         this.loginFail = true
         this.user = null
         // store.commit('setUser', this.user)
         return
-      }
-      let userinfo
-      if (authed.providerData) {
-        userinfo = authed.providerData[0]
-        this.user = Object.assign(
-          {},
-          { uid: authed.uid, email: authed.email },
-          userinfo
-        )
-        // console.log(this.user)
-        store.commit('setUser', this.user)
-      }
-      // }
+      } else store.commit('setUser', authed)
     }
   },
   created: function () {
@@ -54,4 +44,3 @@ new Vue({
   },
   props: ['user']
 })
-

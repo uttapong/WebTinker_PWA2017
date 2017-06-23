@@ -54,6 +54,7 @@
   
   
 </template>
+
 <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw&callback=initMap">
 </script>
@@ -63,6 +64,7 @@ import Vuetify from 'vuetify'
 import {firebase} from '../assets/js/FirebaseConfig'
 
 Vue.use(Vuetify)
+
 export default {
   name: 'resgister',
   data () {
@@ -71,19 +73,25 @@ export default {
       drawerRight: true,
       right: null,
       left: null,
-      detail: '',
-      imageUrl: '',
-      selectType: '',
-      latitude: '',
-      longitude: '',
-      pos: '',
+      detail:'',
+      imageUrl:'',
+      selectType:'',
+      latitude:'',
+      longitude:'',
+      pos:'',
       items: [
           { text: 'Dog' },
           { text: 'Cat' }
         ],
     }
   },
+  created: function(){
+   
+  },
   methods: {
+    uploadAvatarFile: function () {
+      console.log('Avatar:')
+    },
     submitform: function () {
       console.log('Submit')
       console.log(this.detail)
@@ -120,7 +128,7 @@ export default {
 
       
         console.log(postData)
-        /*var newPostKey = firebase.database().ref().child('helpmepets').push().key;
+        var newPostKey = firebase.database().ref().child('helpmepets').push().key;
         console.log("Key :", newPostKey)
         var updates = {};
         //Insert projects
@@ -131,7 +139,7 @@ export default {
             
             this.error = error;
             alert(error)
-          });*/
+          });
 
 
      /* console.log($('#camera')[0].files[0])*/

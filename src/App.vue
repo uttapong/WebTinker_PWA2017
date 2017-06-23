@@ -3,9 +3,12 @@
    <v-app id="helpmepets">
     <v-toolbar class="transparent elevation-0"  >
     
-    <v-toolbar-title class="text-center" >Help Me Pets</v-toolbar-title>
+    <v-toolbar-title class="text-center" ></v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon @click.native="gotoHome">
+     <v-btn icon @click.native="gotoHome">
+      <v-icon>home</v-icon>
+    </v-btn>
+    <v-btn icon @click.native="gotoLogin">
       <v-icon>account_circle</v-icon>
     </v-btn>
     <v-btn icon>
@@ -43,6 +46,11 @@ export default {
     gotoHome: function () {
       console.log('gotoHome');
       this.$router.push('/');
+    },
+
+    gotoLogin: function () {
+      console.log('gotoLogin');
+      this.$router.push('/signin');
     }
   }
 }

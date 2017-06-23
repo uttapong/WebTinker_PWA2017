@@ -17,7 +17,7 @@ export default {
         drawerRight: true,
         right: null,
         left: null
-        }
+    }
   },
   created: function(){
     this.getCurrentLocation();
@@ -52,9 +52,95 @@ export default {
 
       var infoWindow = new google.maps.InfoWindow;
       // console.log("markers ", this.markers)
+
+      this.makeMarkers(map)
       // this.markers.forEach((marker) => {
       //   this.addMarker(map, pos, marker.title, marker.iconURL, marker.contentString);
       // })
+    },
+
+    makeMarkers: function(map) {
+      var catIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/cat-marker.png?alt=media&token=2903f888-50d3-49e8-8d85-cab61d8ea3cd";
+      var dogIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/dog-marker.png?alt=media&token=af45219c-6a27-4b53-9a1f-7b754b849346";
+      var contentString = '<div id="content">'+
+          '<div id="siteNotice">'+
+          '</div>'+
+          '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+          '<div id="bodyContent">'+
+          '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+          'sandstone rock formation in the southern part of the '+
+          'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+          'south west of the nearest large town, Alice Springs; 450&#160;km '+
+          '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+          'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+          'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+          'Aboriginal people of the area. It has many springs, waterholes, '+
+          'rock caves and ancient paintings. Uluru is listed as a World '+
+          'Heritage Site.</p>'+
+          '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+          'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+          '(last visited June 22, 2009).</p>'+
+          '</div>'+
+          '</div>';
+      let markers = [
+          { 
+            position: {
+              lat: 13.770626, 
+              lng: 100.5760677, 
+            },
+            title: "cat1", 
+            type: "cat", 
+            contentString: contentString,
+            iconURL: catIconURL
+          },
+          {
+            position: {
+              lat: 13.770131,
+              lng: 100.574055
+            },
+            title: "dog1",
+            type: "dog",
+            contentString: contentString,
+            iconURL: dogIconURL
+          },
+          {
+            position: {
+              lat: 13.773086,
+              lng: 100.572306
+            },
+            title: "dog2",
+            type: "dog",
+            contentString: contentString,
+            iconURL: dogIconURL
+          },
+          { 
+            position: {
+              lat: 13.771054, 
+              lng: 100.572451
+            },
+            title: "cat1", 
+            type: "cat", 
+            contentString: contentString,
+            iconURL: catIconURL
+          },
+          {
+            position: {
+              lat: 13.769783,
+              lng: 100.571904
+            },
+            title: "dog3",
+            type: "dog",
+            contentString: contentString,
+            iconURL: dogIconURL
+          }
+        ];
+
+        console.log("markers ", markers);
+
+        markers.forEach((marker) => {
+          console.log("marker ", marker);
+          this.addMarker(map, marker.position, marker.title, marker.iconURL, marker.contentString);
+        });
     },
 
     addMarker: function(map, position, title, iconURL, contentString) {
@@ -66,7 +152,6 @@ export default {
           map: map,
           title: title,
           icon: iconURL
-          // shape: shape,
         });
 
         marker.addListener('click', function() {

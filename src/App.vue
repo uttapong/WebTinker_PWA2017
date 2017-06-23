@@ -1,16 +1,50 @@
 <template>
   <div id="app">
+   <v-app id="helpmepets">
+    <v-toolbar class="transparent elevation-0"  >
+    
+    <v-toolbar-title class="text-center">Help Me Pets</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-btn icon>
+      <v-icon>account_circle</v-icon>
+    </v-btn>
+    <v-btn icon>
+      <v-icon>add_circle</v-icon>
+    </v-btn>
+    <v-btn icon>
+      <v-icon>plus</v-icon>
+    </v-btn>
+  </v-toolbar>
+    <main>
+      <v-container fluid>
         <router-view></router-view>
+      </v-container>
+    </main>
+    
+      <Navigation></Navigation>
+  </v-app>
+      
   </div>
 </template>
 
 <script>
+import Navigation from '@/components/Navigation'
+// import '../src/assets/img/bg.png'
 export default {
-  name: 'app'
+  name: 'app',
+  components: { Navigation }
 }
 </script>
 
 <style>
+ #helpmepets {
+ background: url('/static/img/bg.png') no-repeat center center fixed;
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+ }
+ 
 body {
   margin: 0;
 }

@@ -34,7 +34,7 @@ export default {
       // Googleapi callback
       window.initMap = () => {
           // Trigger an event on the vm instance
-          this.makeMap()
+          this.makeMap();
       };
 
       // Add the script to the window object

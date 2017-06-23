@@ -54,13 +54,87 @@
   
   
 </template>
-
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw&callback=initMap">
+</script>
 <script>
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import {firebase} from '../assets/js/FirebaseConfig'
+
+Vue.use(Vuetify)
 export default {
-  name: 'Resgister',
+  name: 'resgister',
   data () {
     return {
-      msg: 'Resgister page'
+      drawer: true,
+      drawerRight: true,
+      right: null,
+      left: null,
+      detail: '',
+      imageUrl: '',
+      selectType: '',
+      latitude: '',
+      longitude: '',
+      pos: '',
+      items: [
+          { text: 'Dog' },
+          { text: 'Cat' }
+        ],
+    }
+  },
+  methods: {
+    submitform: function () {
+      console.log('Submit')
+      console.log(this.detail)
+      console.log(this.selectType)
+      
+      console.log('**********************')
+      let postData = {}
+      postData = {
+          detail: this.detail,
+          type: this.selectType,
+          create_date:''
+        }
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            //let lat = position.coords.latitude;
+            //let long = position.coords.longitude;
+             var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            //console.log('position', pos)
+            //console.log('latitude', pos.lat)
+            postData['latitude'] = position.coords.latitude
+            postData['latlongitudeitude'] = position.coords.longitude
+
+          }, function() {
+           // this.handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+         // this.handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+      
+        console.log(postData)
+        /*var newPostKey = firebase.database().ref().child('helpmepets').push().key;
+        console.log("Key :", newPostKey)
+        var updates = {};
+        //Insert projects
+        updates['/helpmepets/' + newPostKey] = postData;
+        firebase.database().ref().update(updates).then((snapshot) => {
+           console.log('add data:Ok');
+          }).catch((error) => {
+            
+            this.error = error;
+            alert(error)
+          });*/
+
+
+     /* console.log($('#camera')[0].files[0])*/
     }
   }
 }

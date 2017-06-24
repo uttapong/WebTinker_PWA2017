@@ -11,7 +11,7 @@
     
     <template v-if="this.user">
    
-    <v-btn icon>
+    <v-btn icon @click.native="gotoRegisPets">
       <v-icon>add_circle</v-icon>
     </v-btn>
   
@@ -50,12 +50,10 @@ export default {
   store,
   components: { Navigation },
   methods: {
-    gotoAddNewPets: function () {
-      console.log('gotoAddNewPets');
-      // var router = new VueRouter() ;
-      // router.go('/');
+    gotoRegisPets: function () {
+      console.log('gotoRegisPets');      
       this.$router.push('/regispets');
-    },
+    },    
     gotoHome: function () {
       console.log('gotoHome');
       this.$router.push('/');

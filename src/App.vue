@@ -1,47 +1,55 @@
 <template>
-  <div id="app">
-   <v-app id="helpmepets">
-    <v-toolbar class="transparent elevation-0"  >
-    
-    <v-toolbar-title class="text-center" ></v-toolbar-title>
-    <v-spacer></v-spacer>
-     <v-btn icon @click.native="gotoHome">
-      <v-icon>home</v-icon>
-    </v-btn>
-    
-    <template v-if="this.user">
-   
-    <v-btn icon @click.native="gotoAddNewPets">
-      <v-icon>add_circle</v-icon>
-    </v-btn>
-  
-    <v-btn icon @click.native="signOut">
-      <v-icon>exit_to_app</v-icon>
-    </v-btn>
-     <v-btn icon @click.native="gotoLogin">
-      <div class="profile-img"><img :src='user.photoURL' :alt="user.displayName"></img></div>
-    </v-btn>
-    </template>
-    <template v-else>
-     <v-btn icon @click.native="gotoLogin">
-      <v-icon>account_circle</v-icon>
-    </v-btn>
-    </template>
-  </v-toolbar>
-    <main>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </main>
-    
-      <Navigation></Navigation>
-  </v-app>
-      
-  </div>
-</template>
 
+    <div id="app">
+        <v-app id="helpmepets">
+            <v-toolbar class="transparent elevation-0">
+                <v-toolbar-title class="text-center">
+                </v-toolbar-title>
+                <v-spacer>
+                </v-spacer>
+                <v-btn @click.native="gotoHome" icon="">
+                    <v-icon>
+                        home
+                    </v-icon>
+                </v-btn>
+                <template v-if="this.user">
+                    <v-btn @click.native="gotoRegisPets" icon="">
+                        <v-icon>
+                            add_circle
+                        </v-icon>
+                    </v-btn>
+                    <v-btn @click.native="signOut" icon="">
+                        <v-icon>
+                            exit_to_app
+                        </v-icon>
+                    </v-btn>
+                    <v-btn @click.native="gotoLogin" icon="">
+                        <div class="profile-img">
+                            <img :alt="user.displayName" :src="user.photoURL"></img>
+                        </div>
+                    </v-btn>
+                </template>
+                <template v-else>
+                    <v-btn @click.native="gotoLogin" icon="">
+                        <v-icon>
+                            account_circle
+                        </v-icon>
+                    </v-btn>
+                </template>
+            </v-toolbar>
+            <main>
+                <v-container fluid="">
+                    <router-view>
+                    </router-view>
+                </v-container>
+            </main>
+            <navigation>
+            </navigation>
+        </v-app>
+    </div>
+</template>
 <script>
-import Navigation from '@/components/Navigation'
+    import Navigation from '@/components/Navigation'
 import {store} from '@/vuex/store'
 import {firebase} from './assets/js/FirebaseConfig'
 
@@ -50,12 +58,10 @@ export default {
   store,
   components: { Navigation },
   methods: {
-    gotoAddNewPets: function () {
-      console.log('gotoAddNewPets');
-      // var router = new VueRouter() ;
-      // router.go('/');
+    gotoRegisPets: function () {
+      console.log('gotoRegisPets');      
       this.$router.push('/regispets');
-    },
+    },    
     gotoHome: function () {
       console.log('gotoHome');
       this.$router.push('/');
@@ -72,14 +78,19 @@ export default {
       }
   },
   computed: {
-      user () {
-        return store.state.user
-      }
+    user () {
+      return store.state.user
     }
+  },
+ created: function(){
+  console.log ('created App.vue ');
+  
+ },
 }
 </script>
 
 <style scoped>
+
 .profile-img{
   display:inline;
 }
@@ -108,7 +119,7 @@ body {
 
 main {
   text-align: center;
-  /*margin-top: 40px;*/
+  margin-top: 20px;
 }
 
 header {
@@ -131,5 +142,8 @@ header span {
 }
 .container{
   padding: 0px !important;
+}
+.application--toolbar>main>.container {
+    min-height: calc(100vh - 56px - 55px) !important;
 }
 </style>

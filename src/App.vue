@@ -11,7 +11,7 @@
     
     <template v-if="this.user">
    
-    <v-btn icon>
+    <v-btn icon @click.native="gotoAddNewPets">
       <v-icon>add_circle</v-icon>
     </v-btn>
   
@@ -79,7 +79,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .profile-img{
   display:inline;
 }
@@ -88,7 +88,7 @@ export default {
  border-radius: 18px;
 }
  #helpmepets {
- background: url('/static/img/bg.png') no-repeat center center fixed;
+ background: #FFE5B6 url('/static/img/bg.png') no-repeat center center fixed;
  -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -108,7 +108,7 @@ body {
 
 main {
   text-align: center;
-  margin-top: 40px;
+  /*margin-top: 40px;*/
 }
 
 header {
@@ -128,5 +128,8 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   padding-top: 16px;
+}
+.container{
+  padding: 0px !important;
 }
 </style>

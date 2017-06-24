@@ -4,6 +4,7 @@ import Nearby from '@/components/Nearby'
 import Splash from '@/components/Splash'
 import regispets from '@/components/Regispets'
 import Signin from '@/components/Signin'
+import Photo from '@/components/Photo'
 
 Vue.use(Router)
 
@@ -12,6 +13,7 @@ export default new Router({
     {path: '/splash', name: 'Splash', component: Splash},
     {path: '/', component: Nearby, props: true, name: 'Nearby'},
     {path: '/regispets', name: 'Resgister', props: true, component: regispets},
-    {path: '/signin', component: Signin, props: true, name: 'Signin'}
+    {path: '/signin', component: Signin, props: true, name: 'Signin'},
+    {path: '/photo', component: Photo, props: true, name: 'Photo'}
   ]
 })

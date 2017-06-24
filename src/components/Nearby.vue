@@ -1,11 +1,41 @@
 <template>
 <div id="nearby">
   <div id="map"></div>
+   <v-layout row justify-center>
+    <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
+      <v-card>
+        <v-card-row>
+          <v-toolbar light>
+            <v-btn icon="icon" @click.native="dialog = false" light>
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
+          </v-toolbar>
+        </v-card-row>
+        <v-divider></v-divider>
+        <v-layout row wrap>
+          <v-flex xs10 offset-xs1>
+            <v-card>
+              <v-card-text>
+                <img width="100%" v-bind:src="dialog_image_url">
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flex xs10 offset-xs1>
+            <v-card>
+              <v-card-text>{{ dialog_detail }}</v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-card>
+    </v-dialog>
+  </v-layout>
 </div>
 </template>
 <script>
 import {firebase} from '../assets/js/FirebaseConfig'
 var format = require('string-format')
+import moment from 'moment'
 
 export default {
   name: 'nearby',
@@ -14,10 +44,15 @@ export default {
         drawer: true,
         drawerRight: true,
         right: null,
-        left: null
+        left: null,
+        dialog: false,
+        dialog_detail: "",
+        dialog_title: "",
+        dialog_image_url: 'https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/images%2Fhelpmepets%2F1423749169-image-o.jpg?alt=media&token=a2ec52ce-7196-4c77-81fd-bccdb298286c'
     }
   },
   created: function(){
+    this.handleCache();
     this.getCurrentLocation();
     this.initialMap();
   },
@@ -40,6 +75,10 @@ export default {
       script.type = 'text/javascript';
       script.src = this.map_lib + this.map_key + this.map_callback;
       document.body.appendChild(script);
+    },
+
+    handleCache: function() {
+      
     },
 
     makeMap: function(pos){
@@ -70,75 +109,24 @@ export default {
               },
               title: "", 
               type: value.type,
-              contentString: format(windowContentTemplate, value.img, value.detail, "Feb 23, 7:00pm"),
-              iconURL: catIconURL
+              // contentString: format(windowContentTemplate, value.img, value.detail, this.convertTimeStampToReableDateTime(value.create_date)),
+              contentString: value.detail,
+              iconURL: catIconURL,
+              img: value.img
             }
-            console.log("marker ", marker);
-            this.addMarker(map, marker.position, marker.title, marker.type, marker.contentString);
+            //console.log("marker ", marker);
+            this.addMarker(map, marker.position, marker.title, marker.type, marker.img, marker.contentString);
+         }, (error) => {
+            console.log(error);
          });
-
-      // let markers = [
-      //     { 
-      //       position: {
-      //         lat: 13.770626, 
-      //         lng: 100.5760677, 
-      //       },
-      //       title: "cat1", 
-      //       type: "cat", 
-      //       contentString: contentString,
-      //       iconURL: catIconURL
-      //     },
-      //     {
-      //       position: {
-      //         lat: 13.770131,
-      //         lng: 100.574055
-      //       },
-      //       title: "dog1",
-      //       type: "dog",
-      //       contentString: contentString,
-      //       iconURL: dogIconURL
-      //     },
-      //     {
-      //       position: {
-      //         lat: 13.773086,
-      //         lng: 100.572306
-      //       },
-      //       title: "dog2",
-      //       type: "dog",
-      //       contentString: contentString,
-      //       iconURL: dogIconURL
-      //     },
-      //     { 
-      //       position: {
-      //         lat: 13.771054, 
-      //         lng: 100.572451
-      //       },
-      //       title: "cat1", 
-      //       type: "cat", 
-      //       contentString: contentString,
-      //       iconURL: catIconURL
-      //     },
-      //     {
-      //       position: {
-      //         lat: 13.769783,
-      //         lng: 100.571904
-      //       },
-      //       title: "dog3",
-      //       type: "dog",
-      //       contentString: contentString,
-      //       iconURL: dogIconURL
-      //     }
-      //   ];
-
-      //   console.log("markers ", markers);
-
-      //   markers.forEach((marker) => {
-      //     console.log("marker ", marker);
-      //     this.addMarker(map, marker.position, marker.title, marker.iconURL, marker.contentString);
-      //   });
     },
 
-    addMarker: function(map, position, title, type, contentString) {
+    convertTimeStampToReableDateTime: function (timestamp) {
+      let ts = parseInt(timestamp) / 1000
+      return moment.unix(ts).format('MMM Do YY')
+    },
+
+    addMarker: function(map, position, title, type, img, contentString) {
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
@@ -149,8 +137,13 @@ export default {
           icon: this.getIconURL(type)
         });
 
-        marker.addListener('click', function() {
-          infowindow.open(map, marker);
+        marker.addListener('click', () => {
+          console.log("content string ", contentString);
+          this.dialog_detail = contentString;
+          this.dialog_title = type;
+          this.dialog = true;
+          this.dialog_image_url = img;
+          // infowindow.open(map, marker);
         });
     },
 
@@ -171,7 +164,7 @@ export default {
             };
 
             this.makeMap(pos);
-            console.log('position', pos);
+            //console.log('position', pos);
           }, () => {
             this.handleLocationError(true, infoWindow, map.getCenter());
           });

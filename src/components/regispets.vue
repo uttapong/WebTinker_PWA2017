@@ -92,6 +92,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import {firebase} from '../assets/js/FirebaseConfig'
+import {store} from '../vuex/store'
 
 Vue.use(Vuetify)
 
@@ -123,6 +124,7 @@ export default {
   created: function(){
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
+   console.log('User:', store.state.user.uid)
   },
   watch: {
       
@@ -136,7 +138,7 @@ export default {
 
       this.uploadFile(
                   files[0],
-                  'images/helpmepets/'+files[0].name,
+                  'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
                   (imgURL)=>{
                     console.log("upload complete callback avatarFile >>", imgURL);
                         this.imageUrl = imgURL;
@@ -173,13 +175,6 @@ export default {
       console.log('Type:', this.selectType);
       console.log('Img : ', this.imageUrl);
       console.log('**********************');
-
-      //Btn loader
-    
-
-      //this.loader = null
-     
-       //console.log('Load2:', this[l])
       
       if (this.imageUrl === '') {
         this.loading3 = false
@@ -205,6 +200,7 @@ export default {
 
       let postData = {};
       postData = {
+          uid: store.state.user.uid,
           img: this.imageUrl,
           detail: this.detail,
           type: this.selectType,

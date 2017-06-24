@@ -60,7 +60,23 @@
       <v-layout row>
         <v-flex xs6 order-xs1></v-flex>
         <v-flex xs6 order-xs2>
-          <v-btn primary light @click.native="submitform">Send</v-btn>
+          <!--<v-btn
+            light
+            secondary
+            :loading="loading"
+            @click.native="loader = 'loading'"
+            :disabled="loading"
+          >
+            Accept Terms|submitform
+          </v-btn> -->
+
+          <v-btn 
+          primary 
+          light 
+          :loading="loading3"
+          @click.native="submitform"
+          :disabled="loading3"
+          >Send</v-btn>
           <v-btn dark default>Cannel</v-btn>
         </v-flex>
       </v-layout>
@@ -95,6 +111,8 @@ export default {
       pos:'',
       alert_success: false,
       alert_error: false,
+      loader: null,
+      loading3: false,
       items: [
           { text: 'Dog' },
           { text: 'Cat' }
@@ -106,6 +124,9 @@ export default {
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
   },
+  watch: {
+      
+    },
   methods: {
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -145,27 +166,41 @@ export default {
     submitform: function () {
       this.alert_success  = false
       this.alert_error = false
-
+      this.loading3 =true
+      
       console.log('Submit');
       console.log('detail:', this.detail);
       console.log('Type:', this.selectType);
       console.log('Img : ', this.imageUrl);
       console.log('**********************');
 
+      //Btn loader
+    
+
+      //this.loader = null
+     
+       //console.log('Load2:', this[l])
+      
       if (this.imageUrl === '') {
+        this.loading3 = false
         this.alert_error = true
         return false;
       }
+     
 
       if (this.detail === '') {
+        this.loading3 = false
         this.alert_error = true
         return false;
       }
 
       if (this.selectType === '') {
+        this.loading3 = false
         this.alert_error = true
         return false;
       }
+
+      
 
 
       let postData = {};
@@ -199,6 +234,7 @@ export default {
         firebase.database().ref().update(updates).then((snapshot) => {
            //console.log('add data:Ok');
            this.alert_success = true
+           this.loading3 = false
           }).catch((error) => {
             
             this.error = error;
@@ -232,10 +268,40 @@ a {
   color: #42b983;
 }
 
-.alert_success, .alert_error {
-  transition: opacity .5s
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0
-}
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

@@ -48,9 +48,8 @@
 <script>
 import {firebase} from '../assets/js/FirebaseConfig'
 import {store} from '../vuex/store'
-
-var format = require('string-format')
 import moment from 'moment'
+var format = require('string-format')
 
 export default {
   name: 'nearby',
@@ -175,7 +174,6 @@ export default {
               },
               title: "", 
               type: value.type,
-              // contentString: format(windowContentTemplate, value.img, value.detail, this.convertTimeStampToReableDateTime(value.create_date)),
               contentString: value.detail,
               iconURL: catIconURL,
               img: value.img,
@@ -284,8 +282,8 @@ export default {
   /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      min-height: calc(100vh - 56px - 56px - 56px) !important;
-      width: 100%;
+      min-height: calc(100vh - 56px - 56px)!important;
+      margin: -16px;
     }
 
     .container container--fluid {

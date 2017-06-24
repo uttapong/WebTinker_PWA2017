@@ -135,7 +135,7 @@ export default {
       if (!files.length)
         return;
 
-
+      this.imageUrl = '../static/img/loading.gif'
       this.uploadFile(
                   files[0],
                   'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
@@ -144,7 +144,7 @@ export default {
                         this.imageUrl = imgURL;
                   }
                 );  
-      this.imageUrl = files[0];
+      //this.imageUrl = files[0];
       // console.log('Img : ', files[0]);
     },
     goHome: function () {

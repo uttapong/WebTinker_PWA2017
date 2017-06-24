@@ -3,17 +3,30 @@
    <v-app id="helpmepets">
     <v-toolbar class="transparent elevation-0"  >
     
-    <v-toolbar-title class="text-center" >Help Me Pets</v-toolbar-title>
+    <v-toolbar-title class="text-center" ></v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-btn icon @click.native="gotoHome">
-      <v-icon>account_circle</v-icon>
+     <v-btn icon @click.native="gotoHome">
+      <v-icon>home</v-icon>
     </v-btn>
+    
+    <template v-if="this.user">
+   
     <v-btn icon>
       <v-icon>add_circle</v-icon>
     </v-btn>
-    <v-btn icon @click.native="gotoAddNewPets">
-      <v-icon>plus</v-icon>
+  
+    <v-btn icon @click.native="signOut">
+      <v-icon>exit_to_app</v-icon>
     </v-btn>
+     <v-btn icon @click.native="gotoLogin">
+      <div class="profile-img"><img :src='user.photoURL' :alt="user.displayName"></img></div>
+    </v-btn>
+    </template>
+    <template v-else>
+     <v-btn icon @click.native="gotoLogin">
+      <v-icon>account_circle</v-icon>
+    </v-btn>
+    </template>
   </v-toolbar>
     <main>
       <v-container fluid>
@@ -29,9 +42,12 @@
 
 <script>
 import Navigation from '@/components/Navigation'
-// import '../src/assets/img/bg.png'
+import {store} from '@/vuex/store'
+import {firebase} from './assets/js/FirebaseConfig'
+
 export default {
   name: 'app',
+  store,
   components: { Navigation },
   methods: {
     gotoAddNewPets: function () {
@@ -43,12 +59,34 @@ export default {
     gotoHome: function () {
       console.log('gotoHome');
       this.$router.push('/');
+    },
+
+    gotoLogin: function () {
+      console.log('gotoLogin');
+      this.$router.push('/signin');
+    },
+    signOut() {
+        firebase.auth().signOut();
+        store.commit('setUser', null);
+        this.$router.push('/');
+      }
+  },
+  computed: {
+      user () {
+        return store.state.user
+      }
     }
-  }
 }
 </script>
 
 <style>
+.profile-img{
+  display:inline;
+}
+.profile-img img{
+ width: 36px;
+ border-radius: 18px;
+}
  #helpmepets {
  background: url('/static/img/bg.png') no-repeat center center fixed;
  -webkit-background-size: cover;

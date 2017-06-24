@@ -13,7 +13,7 @@
             <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
             <v-btn @click.native="gotoHome" icon="" class="blue--text text--lighten-2">
                 <v-icon>
-                    thumb_up
+                    favorite
                 </v-icon>
             </v-btn>
           </v-toolbar>

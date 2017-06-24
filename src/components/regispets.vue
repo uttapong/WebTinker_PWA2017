@@ -60,7 +60,23 @@
       <v-layout row>
         <v-flex xs6 order-xs1></v-flex>
         <v-flex xs6 order-xs2>
-          <v-btn primary light @click.native="submitform">Send</v-btn>
+          <!--<v-btn
+            light
+            secondary
+            :loading="loading"
+            @click.native="loader = 'loading'"
+            :disabled="loading"
+          >
+            Accept Terms|submitform
+          </v-btn> -->
+
+          <v-btn 
+          primary 
+          light 
+          :loading="loading3"
+          @click.native="submitform"
+          :disabled="loading3"
+          >Send</v-btn>
           <v-btn dark default>Cannel</v-btn>
         </v-flex>
       </v-layout>
@@ -76,6 +92,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import {firebase} from '../assets/js/FirebaseConfig'
+import {store} from '../vuex/store'
 
 Vue.use(Vuetify)
 
@@ -95,6 +112,8 @@ export default {
       pos:'',
       alert_success: false,
       alert_error: false,
+      loader: null,
+      loading3: false,
       items: [
           { text: 'Dog' },
           { text: 'Cat' }
@@ -105,7 +124,9 @@ export default {
   created: function(){
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
+   console.log('User:', store.state.user.uid)
   },
+  watch: {},
   methods: {
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -115,19 +136,19 @@ export default {
 
       this.uploadFile(
                   files[0],
-                  'images/helpmepets/'+files[0].name,
+                  'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
                   (imgURL)=>{
                     console.log("upload complete callback avatarFile >>", imgURL);
                         this.imageUrl = imgURL;
                   }
                 );  
       this.imageUrl = files[0];
-      console.log('Img : ', files[0]);
+      // console.log('Img : ', files[0]);
     },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
         let storageRef = firebase.storage().ref();
-        console.log('url ' + url);
+        // console.log('url ' + url);
         storageRef
           .child(url)
           .put(file, metadata)
@@ -141,72 +162,69 @@ export default {
             this.error = error;
             console.log(error)
           });
-      },
+    },
+
     submitform: function () {
       this.alert_success  = false
       this.alert_error = false
-
-      console.log('Submit');
-      console.log('detail:', this.detail);
-      console.log('Type:', this.selectType);
-      console.log('Img : ', this.imageUrl);
-      console.log('**********************');
-
-      if (this.imageUrl === '') {
+      this.loading3 =true
+      
+      // console.log('Submit');
+      // console.log('detail:', this.detail);
+      // console.log('Type:', this.selectType);
+      // console.log('Img : ', this.imageUrl);
+      // console.log('**********************');
+      //this.loader = null
+      
+      if (this.imageUrl === '' || this.selectType === '' || this.detail === '') {
+        this.loading3 = false
         this.alert_error = true
         return false;
-      }
-
-      if (this.detail === '') {
-        this.alert_error = true
-        return false;
-      }
-
-      if (this.selectType === '') {
-        this.alert_error = true
-        return false;
-      }
-
+      }    
 
       let postData = {};
       postData = {
-          img: this.imageUrl,
-          detail: this.detail,
-          type: this.selectType,
-          create_date: firebase.database.ServerValue.TIMESTAMP
-        }
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            
-            postData['lat'] = position.coords.latitude
-            postData['long'] = position.coords.longitude
-
-          }, function() {
-           // this.handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-         // this.handleLocationError(false, infoWindow, map.getCenter());
-        }
-
+        uid: store.state.user.uid,
+        img: this.imageUrl,
+        detail: this.detail,
+        type: this.selectType,
+        create_date: firebase.database.ServerValue.TIMESTAMP
+      }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          // console.log(position);
+          postData['lat'] = position.coords.latitude
+          postData['long'] = position.coords.longitude
+          
+        }, function() {
+          // this.handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        this.handleLocationError(false, infoWindow, map.getCenter());
+      }
       
-        console.log(postData)
-        var newPostKey = firebase.database().ref().child('helpmepets').push().key;
-        //console.log("Key :", newPostKey)
-        var updates = {};
-        //Insert projects
-        updates['/helpmepets/' + newPostKey] = postData;
-        firebase.database().ref().update(updates).then((snapshot) => {
-           //console.log('add data:Ok');
-           this.alert_success = true
-          }).catch((error) => {
-            
-            this.error = error;
-            alert(error)
-          });
-
+      //Insert projects        
+      var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
+      var updates = {};                
+      updates['/helpmepets/' + newPostKey] = postData;
+      console.log(postData);
+      firebase.database().ref().update(updates).then((snapshot) => {        
+        this.alert_success = true
+        this.loading3 = false
+      }).catch((error) => {
+        
+        this.error = error;
+        alert(error)
+      });
+        
 
      /* console.log($('#camera')[0].files[0])*/
+    },
+
+    handleLocationError: function(browserHasGeolocation, infoWindow, pos) {
+        // default position.
+      console.log("handleLocationError");    
     }
   }
 }
@@ -232,10 +250,40 @@ a {
   color: #42b983;
 }
 
-.alert_success, .alert_error {
-  transition: opacity .5s
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0
-}
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

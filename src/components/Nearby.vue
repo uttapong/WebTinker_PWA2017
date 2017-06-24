@@ -52,6 +52,7 @@ export default {
     }
   },
   created: function(){
+    this.handleCache();
     this.getCurrentLocation();
     this.initialMap();
   },
@@ -74,6 +75,10 @@ export default {
       script.type = 'text/javascript';
       script.src = this.map_lib + this.map_key + this.map_callback;
       document.body.appendChild(script);
+    },
+
+    handleCache: function() {
+      
     },
 
     makeMap: function(pos){
@@ -108,7 +113,7 @@ export default {
               contentString: value.detail,
               iconURL: catIconURL
             }
-            console.log("marker ", marker);
+            //console.log("marker ", marker);
             this.addMarker(map, marker.position, marker.title, marker.type, marker.contentString);
          }, (error) => {
             console.log(error);
@@ -157,7 +162,7 @@ export default {
             };
 
             this.makeMap(pos);
-            console.log('position', pos);
+            //console.log('position', pos);
           }, () => {
             this.handleLocationError(true, infoWindow, map.getCenter());
           });

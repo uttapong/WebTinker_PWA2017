@@ -40,7 +40,6 @@
 </template>
 <script>
 import {firebase} from '../assets/js/FirebaseConfig'
-var format = require('string-format')
 import moment from 'moment'
 
 export default {
@@ -118,7 +117,6 @@ export default {
               },
               title: "", 
               type: value.type,
-              // contentString: format(windowContentTemplate, value.img, value.detail, this.convertTimeStampToReableDateTime(value.create_date)),
               contentString: value.detail,
               iconURL: catIconURL,
               img: value.img

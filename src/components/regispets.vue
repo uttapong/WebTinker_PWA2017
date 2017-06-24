@@ -77,7 +77,9 @@
           @click.native="submitform"
           :disabled="loading3"
           >Send</v-btn>
-          <v-btn dark default>Cannel</v-btn>
+          <v-btn dark default
+          @click.native="goHome"
+          >Cannel</v-btn>
         </v-flex>
       </v-layout>
   </div>
@@ -133,8 +135,7 @@ export default {
       if (!files.length)
         return;
 
-      console.log(files);
-
+      this.imageUrl = '../static/img/loading.gif'
       this.uploadFile(
                   files[0],
                   'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
@@ -143,19 +144,19 @@ export default {
                         this.imageUrl = imgURL;
                   }
                 );  
-      this.imageUrl = files[0];
+      //this.imageUrl = files[0];
       // console.log('Img : ', files[0]);
     },
-
+    goHome: function () {
+     this.$router.go(-1)
+    },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
-        let storageRef = firebase.storage().ref();
-        // console.log('url ' + url);
+        let storageRef = firebase.storage().ref();        
         storageRef
           .child(url)
           .put(file, metadata)
-          .then((snapshot) => {
-            //console.log("upload complete url  >> " + snapshot.downloadURL);
+          .then((snapshot) => {          
             callback(snapshot.downloadURL);
 //            firebase.database().ref(fbField).set(url);
           })
@@ -192,6 +193,7 @@ export default {
         type: this.selectType,
         create_date: firebase.database.ServerValue.TIMESTAMP
       }
+      var objTmp = this;
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           // console.log(position);
@@ -212,16 +214,31 @@ export default {
             alert(error)
           });
           
+          //Insert projects        
+          var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
+          var updates = {};                
+          updates['/helpmepets/' + newPostKey] = postData;
+          console.log(updates);          
+          
+          firebase.database().ref().update(updates).then((snapshot) => {             
+            objTmp.handleUpdated();
+          }).catch((error) => {              
+            console.log(error);
+          });
         }, function() {
           // this.handleLocationError(true, infoWindow, map.getCenter());
+          console.log("fail update firebase");
         });
       } else {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, infoWindow, map.getCenter());
       }
-        
-
      /* console.log($('#camera')[0].files[0])*/
+    },
+
+    handleUpdated: function() {
+      this.alert_success = true
+      this.loading3 = false
     },
 
     handleLocationError: function(browserHasGeolocation, infoWindow, pos) {

@@ -5,15 +5,20 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    user: null
+    user: null,
+    uploadPhoto: null
   },
   mutations: {
-    setUser: (state, userinfo) => { state.user = userinfo }
+    setUser: (state, userinfo) => { state.user = userinfo },
+    setPhoto: (state, url) => { state.uploadPhoto = url }
   },
   plugins: [createPersistedState()],
   getters: {
     getUser: state => {
       return state.user
+    },
+    getPhoto: state => {
+      return state.uploadPhoto
     }
   }
 })

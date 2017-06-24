@@ -14,6 +14,6 @@ export default new Router({
     {path: '/', component: Nearby, props: true, name: 'Nearby'},
     {path: '/regispets', name: 'Resgister', props: true, component: regispets},
     {path: '/signin', component: Signin, props: true, name: 'Signin'},
-    {path: '/photo', component: Photo, props: true, name: 'Photo'}
+    {path: '/capture', component: Photo, props: true, name: 'Photo'}
   ]
 })

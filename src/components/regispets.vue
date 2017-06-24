@@ -8,47 +8,15 @@
           Error, Please check data again.
         </v-alert>
 
-
-    <v-layout row>
-        
-        <v-flex xs6 order-xs1>
-          Pic.
-          
-        </v-flex>
-        <v-flex xs6 order-xs2>
-          <!--<input type="file" accept="image/*" capture="camera" id="imageUrl" @change="onFileChange"  />
-            <img id="frame"><br/>-->
-
-            <input v-if="imageUrl == ''" type="file" name="imageUrl" class="" id="imageUrl" accept="image/*" @change="onFileChange" >
-            <img v-if="imageUrl" class="user-avatar" v-bind:src="imageUrl" width="100px" />
-
-        </v-flex>
-    </v-layout>
-    <v-layout row>
-      <v-flex xs6 order-xs1>
-          Detail 
-          
-        </v-flex>
-        <v-flex xs6 order-xs2>
-          <v-text-field
-              name="input-7-1"
-              multi-line
-              v-model="detail"
-              id="detail"
-            ></v-text-field>
-        </v-flex>
-
-
-      </v-layout>
-    <v-layout row>
-      <v-flex xs6 order-xs1>
-          Type 
-        </v-flex>
+     <v-layout row>
+     
+        <v-flex xs6>
+            <v-subheader><img class="type-image" :src="selectImage"></img></v-subheader>
+         </v-flex>
         <v-flex xs6 order-xs2>
           <v-select
               v-bind:items="items"
               v-model="selectType"
-              class="input-group--focused"
               dark
               item-value="text"
             ></v-select>
@@ -56,10 +24,43 @@
 
 
       </v-layout>
+      <v-layout row>
+        
+        <v-flex xs12 order-xs2>
+          <v-text-field
+              name="input-7-1"
+              multi-line
+              v-model="detail"
+              id="detail"
+              hint="How animal(s) look like or how pity they are?"
+              placeholder="Founded animal(s) description"
+            ></v-text-field>
+        </v-flex>
+
+
+      </v-layout>
+    <v-layout row>
+        
+   
+        <v-flex xs12 order-xs2>
+          <!--<input type="file" accept="image/*" capture="camera" id="imageUrl" @change="onFileChange"  />
+            <img id="frame"><br/>-->
+            <input v-if="imageUrl == ''" type="file" name="imageUrl" class="file-upload" id="imageUrl" accept="image/*" @change="onFileChange" >
+      
+            <template v-if="imageUrl">
+            <img  class="upload-preview" v-bind:src="imageUrl"/>
+            <v-btn icon class="white--text deep-orange"  @click.native="clearPhoto">
+              <v-icon>clear</v-icon>
+            </v-btn>
+            </template>
+
+        </v-flex>
+    </v-layout>
+    
+   
 
       <v-layout row>
-        <v-flex xs6 order-xs1></v-flex>
-        <v-flex xs6 order-xs2>
+        <v-flex xs12 order-xs2>
           <!--<v-btn
             light
             secondary
@@ -69,17 +70,19 @@
           >
             Accept Terms|submitform
           </v-btn> -->
-
+          <v-card-text>
+          <div>
           <v-btn 
-          primary 
+          large
+          class="deep-orange" 
           light 
+          round
           :loading="loading3"
           @click.native="submitform"
           :disabled="loading3"
-          >Send</v-btn>
-          <v-btn dark default
-          @click.native="goHome"
-          >Cannel</v-btn>
+          ><v-icon left light>favorite</v-icon> Help this animal</v-btn>
+         </div>
+         </v-card-text>
         </v-flex>
       </v-layout>
   </div>
@@ -100,6 +103,7 @@ Vue.use(Vuetify)
 
 export default {
   name: 'resgister',
+  store,
   data () {
     return {
       drawer: true,
@@ -108,7 +112,7 @@ export default {
       left: null,
       detail:'',
       imageUrl:'',
-      selectType:'',
+      selectType:'Dog',
       latitude:'',
       longitude:'',
       pos:'',
@@ -120,15 +124,35 @@ export default {
           { text: 'Dog' },
           { text: 'Cat' }
         ],
+      selectImage:'/static/img/icons/dog.png'
+      
     }
   },
 
   created: function(){
+    if(store.state.uploadPhoto){
+      this.imageUrl=store.state.uploadPhoto
+
+      this.uploadFileBase64(
+                  'images/helpmepets/'+store.state.user.uid+'/',
+                  (imgURL)=>{
+                    console.log("upload complete callback avatarFile >>", imgURL);
+                        this.imageUrl = imgURL;
+                  }
+                ); 
+    }
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
    console.log('User:', store.state.user.uid)
   },
-  watch: {},
+  watch: {
+    selectType: function () {
+      // `this` points to the vm instance
+      if(this.selectType=="Dog")this.selectImage ='/static/img/icons/dog.png';
+      else this.selectImage= '/static/img/icons/cat.png';
+    }
+
+  },
   methods: {
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -166,7 +190,25 @@ export default {
             console.log(error)
           });
     },
-
+    uploadFileBase64: function ( url,callback) {
+      let metadata = {'contentType': 'image/jpeg'};
+        let storageRef = firebase.storage().ref();        
+        storageRef
+          .child(url)
+          .putString(store.state.uploadPhoto, 'data_url')
+          .then((snapshot) => {          
+            callback(snapshot.downloadURL);
+//            firebase.database().ref(fbField).set(url);
+          })
+          .catch((error) => {
+            this.isShowRegisteringProgress = false;
+            this.error = error;
+            console.log(error)
+          });
+    },
+    clearPhoto(){
+      this.imageUrl='';
+    },
     submitform: function () {
       this.alert_success  = false
       this.alert_error = false
@@ -251,6 +293,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#resgister{
+  padding: 0px 20px;
+}
+.type-image{
+  height: 64px;
+}
 h1, h2 {
   font-weight: normal;
 }
@@ -268,6 +316,14 @@ li {
 a {
   color: #42b983;
 }
+
+ #helpmepets {
+ background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+ }
 
 .custom-loader {
     animation: loader 1s infinite;
@@ -305,4 +361,42 @@ a {
       transform: rotate(360deg);
     }
   }
+
+
+.file-upload {
+    display: block;
+    position: relative;
+    width: 200px;
+    margin: auto;
+    cursor: pointer;
+    border: 0;
+    height: 60px;
+    border-radius: 5px;
+    outline: 0;
+}
+.file-upload:hover:after {
+   /* background: #444;*/
+}
+.file-upload:after {
+        transition: 200ms all ease;
+    background: #aaa;
+    text-shadow: 0 2px 0 rgba(0,0,0,.2);
+    color: #fff;
+    font-size: 1.4rem;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    content: 'Upload Photo';
+    line-height: 60px;
+    border-radius: 5px;
+}
+
+.upload-preview{
+  width: 120px;
+  border-radius: 10px;
+}
 </style>

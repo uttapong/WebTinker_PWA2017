@@ -60,7 +60,7 @@ export default {
   methods: {
     gotoRegisPets: function () {
       console.log('gotoRegisPets');      
-      this.$router.push('/regispets');
+      this.$router.push('/capture');
     },    
     gotoHome: function () {
       console.log('gotoHome');
@@ -99,7 +99,7 @@ export default {
  border-radius: 18px;
 }
  #helpmepets {
- background: #FFE5B6 url('/static/img/bg.png') no-repeat center center fixed;
+ background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed;
  -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

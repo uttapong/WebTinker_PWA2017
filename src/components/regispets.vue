@@ -143,12 +143,12 @@ export default {
                   }
                 );  
       this.imageUrl = files[0];
-      console.log('Img : ', files[0]);
+      // console.log('Img : ', files[0]);
     },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
         let storageRef = firebase.storage().ref();
-        console.log('url ' + url);
+        // console.log('url ' + url);
         storageRef
           .child(url)
           .put(file, metadata)
@@ -162,87 +162,71 @@ export default {
             this.error = error;
             console.log(error)
           });
-      },
+    },
+
     submitform: function () {
       this.alert_success  = false
       this.alert_error = false
       this.loading3 =true
       
-      console.log('Submit');
-      console.log('detail:', this.detail);
-      console.log('Type:', this.selectType);
-      console.log('Img : ', this.imageUrl);
-      console.log('**********************');
-
-      //Btn loader
-    
-
+      // console.log('Submit');
+      // console.log('detail:', this.detail);
+      // console.log('Type:', this.selectType);
+      // console.log('Img : ', this.imageUrl);
+      // console.log('**********************');
       //this.loader = null
      
        //console.log('Load2:', this[l])
       
-      if (this.imageUrl === '') {
+      if (this.imageUrl === '' || this.selectType === '' || this.detail === '') {
         this.loading3 = false
         this.alert_error = true
         return false;
-      }
-     
-
-      if (this.detail === '') {
-        this.loading3 = false
-        this.alert_error = true
-        return false;
-      }
-
-      if (this.selectType === '') {
-        this.loading3 = false
-        this.alert_error = true
-        return false;
-      }
-
-      
-
+      }    
 
       let postData = {};
       postData = {
-          img: this.imageUrl,
-          detail: this.detail,
-          type: this.selectType,
-          create_date: firebase.database.ServerValue.TIMESTAMP
-        }
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            
-            postData['lat'] = position.coords.latitude
-            postData['long'] = position.coords.longitude
-
-          }, function() {
-           // this.handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-         // this.handleLocationError(false, infoWindow, map.getCenter());
-        }
-
+        img: this.imageUrl,
+        detail: this.detail,
+        type: this.selectType,
+        create_date: firebase.database.ServerValue.TIMESTAMP
+      }
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          // console.log(position);
+          postData['lat'] = position.coords.latitude
+          postData['long'] = position.coords.longitude
+          
+        }, function() {
+          // this.handleLocationError(true, infoWindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        this.handleLocationError(false, infoWindow, map.getCenter());
+      }
       
-        console.log(postData)
-        var newPostKey = firebase.database().ref().child('helpmepets').push().key;
-        //console.log("Key :", newPostKey)
-        var updates = {};
-        //Insert projects
-        updates['/helpmepets/' + newPostKey] = postData;
-        firebase.database().ref().update(updates).then((snapshot) => {
-           //console.log('add data:Ok');
-           this.alert_success = true
-           this.loading3 = false
-          }).catch((error) => {
-            
-            this.error = error;
-            alert(error)
-          });
-
+      //Insert projects        
+      var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
+      var updates = {};                
+      updates['/helpmepets/' + newPostKey] = postData;
+      console.log(postData);
+      firebase.database().ref().update(updates).then((snapshot) => {
+        //console.log('add data:Ok');
+        this.alert_success = true
+        this.loading3 = false
+      }).catch((error) => {
+        
+        this.error = error;
+        alert(error)
+      });
+        
 
      /* console.log($('#camera')[0].files[0])*/
+    },
+
+    handleLocationError: function(browserHasGeolocation, infoWindow, pos) {
+        // default position.
+      console.log("handleLocationError");    
     }
   }
 }

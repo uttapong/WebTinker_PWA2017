@@ -16,6 +16,7 @@ export default {
     }
   },
   created: function(){
+    this.handleCache();
     this.getCurrentLocation();
     this.initialMap();
   },
@@ -38,6 +39,10 @@ export default {
       script.type = 'text/javascript';
       script.src = this.map_lib + this.map_key + this.map_callback;
       document.body.appendChild(script);
+    },
+
+    handleCache: function() {
+      
     },
 
     makeMap: function(pos){

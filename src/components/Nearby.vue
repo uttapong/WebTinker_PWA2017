@@ -76,14 +76,14 @@ export default {
           '</div>'+
           '</div>';
 
-      let listener = firebase.database().ref("helpmepetstemp");
+      let listener = firebase.database().ref("helpmepets");
       listener
          .on('child_added', (snapshot) => {
             let value = snapshot.val();
             let marker = { 
               position: {
-                lat: value.latitude, 
-                lng: value.longitude, 
+                lat: value.lat, 
+                lng: value.long, 
               },
               title: "", 
               type: value.type,

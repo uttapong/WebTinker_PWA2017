@@ -77,7 +77,9 @@
           @click.native="submitform"
           :disabled="loading3"
           >Send</v-btn>
-          <v-btn dark default>Cannel</v-btn>
+          <v-btn dark default
+          @click.native="goHome"
+          >Cannel</v-btn>
         </v-flex>
       </v-layout>
   </div>
@@ -133,7 +135,7 @@ export default {
       if (!files.length)
         return;
 
-
+      this.imageUrl = '../static/img/loading.gif'
       this.uploadFile(
                   files[0],
                   'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
@@ -142,8 +144,11 @@ export default {
                         this.imageUrl = imgURL;
                   }
                 );  
-      this.imageUrl = files[0];
+      //this.imageUrl = files[0];
       // console.log('Img : ', files[0]);
+    },
+    goHome: function () {
+     this.$router.go(-1)
     },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
@@ -214,6 +219,7 @@ export default {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, infoWindow, map.getCenter());
       }
+
      /* console.log($('#camera')[0].files[0])*/
     },
 

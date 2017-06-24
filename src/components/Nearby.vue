@@ -94,7 +94,9 @@ export default {
       var map = new google.maps.Map(document.getElementById('map'), {
           center: pos,
           zoom: 17,
-          fullscreenControl: false
+          fullscreenControl: false,
+          streetViewControl: false,
+          mapTypeControl: false,
         });
 
       var infoWindow = new google.maps.InfoWindow;

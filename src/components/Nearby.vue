@@ -32,7 +32,7 @@ export default {
       // Googleapi callback
       window.initMap = () => {
           // Trigger an event on the vm instance
-          this.makeMap();
+          this.makeMap({lat: 13.770626, lng: 100.5760677});
       };
 
       // Add the script to the window object
@@ -57,13 +57,7 @@ export default {
     makeMarkers: function(map) {
       var catIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/cat-marker.png?alt=media&token=2903f888-50d3-49e8-8d85-cab61d8ea3cd";
       var dogIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/dog-marker.png?alt=media&token=af45219c-6a27-4b53-9a1f-7b754b849346";
-      var windowContentTemplate = '<div id="content">'+
-          '<div id="siteNotice">'+
-          '</div>'+
-          '<div id="bodyContent">'+
-          '<p>{}{}</p>'+
-          '</div>'+
-          '</div>';
+      var windowContentTemplate = '<div class="columns"> <div id="box1"> <img height="100px" src="{}" /> </div> <div id="box2"> <strong>{}</strong><br /> <i>{}</i> </div> </div>';
 
       let listener = firebase.database().ref("helpmepets");
       listener
@@ -76,7 +70,7 @@ export default {
               },
               title: "", 
               type: value.type,
-              contentString: format(windowContentTemplate, value.detail, " what!!!"),
+              contentString: format(windowContentTemplate, value.img, value.detail, "Feb 23, 7:00pm"),
               iconURL: catIconURL
             }
             console.log("marker ", marker);
@@ -190,7 +184,7 @@ export default {
     handleLocationError: function(browserHasGeolocation, infoWindow, pos) {
         // default position.
         console.log("handleLocationError");
-        self.makeMap({lat: 13.770626, lng: 100.5760677})
+        this.makeMap({lat: 13.770626, lng: 100.5760677})
       }
 
   }
@@ -224,10 +218,18 @@ export default {
       height: 700px;
       width: 100%;
     }
-    /* Optional: Makes the sample page fill the window. */
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
+    #columns {
+        width:100px
+    }
+    #columns div {
+        float:left;
+        width:50%;
+        outline:1px solid red;
+        height:100px;
+    }
+    #columns:after {
+        content:"";
+        display:block;
+        clear:both;
     }
 </style>

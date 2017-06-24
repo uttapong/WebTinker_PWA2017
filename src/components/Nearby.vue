@@ -1,5 +1,12 @@
 <template>
 <div id="nearby">
+   <v-alert success  v-model="alert_success">
+    Success, Insert data.
+  </v-alert>
+
+  <v-alert error  v-model="alert_error">
+    Error, Please check data again.
+  </v-alert>
   <div id="map"></div>
   <!-- support only mobile web screen only. -->
    <v-layout row justify-center>
@@ -11,14 +18,13 @@
               <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
-            <v-btn @click.native="gotoHome" icon="" class="blue--text text--lighten-2">
+            <v-btn @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="blue--text text--lighten-2">
                 <v-icon>
                     favorite
                 </v-icon>
             </v-btn>
           </v-toolbar>
-        </v-card-row>
-        <v-divider></v-divider>
+        </v-card-row> 
         <v-layout row wrap>
           <v-flex xs10 offset-xs1>
             <v-card>
@@ -36,10 +42,13 @@
       </v-card>
     </v-dialog>
   </v-layout>
+
 </div>
 </template>
 <script>
 import {firebase} from '../assets/js/FirebaseConfig'
+import {store} from '../vuex/store'
+
 var format = require('string-format')
 import moment from 'moment'
 
@@ -52,8 +61,13 @@ export default {
         right: null,
         left: null,
         dialog: false,
+        loadingFlag: false,  
+        alert_success: false,
+        alert_error: false,
         dialog_detail: "",
         dialog_title: "",
+        dialog_key: "",
+        dialog_uid: "",
         dialog_image_url: 'https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/images%2Fhelpmepets%2F1423749169-image-o.jpg?alt=media&token=a2ec52ce-7196-4c77-81fd-bccdb298286c'
     }
   },
@@ -87,6 +101,48 @@ export default {
       
     },
 
+    addFav: function (key) {
+      //console.log(key);
+      let uid = store.state.user.uid;
+      
+      if (uid && uid != '' && this.loadingFlag==false) {
+        this.loadingFlag = true;
+        let postData = {};
+        postData = {
+          uid: uid,
+          helpmepets_key: key.dialog_key,
+          create_date: firebase.database.ServerValue.TIMESTAMP
+        }
+
+        //Insert projects  
+        var objTmp = this;      
+        var newPostKey = firebase.database().ref().child('helpmepets_favorite').push().key;        
+        var updates = {};                
+        updates['/helpmepets_favorite/' + newPostKey] = postData;
+        console.log(updates);          
+        
+        firebase.database().ref().update(updates).then((snapshot) => {             
+          objTmp.handleUpdated();
+          this.loadingFlag = false;
+        }).catch((error) => {              
+          console.log(error);
+          this.loadingFlag = false;
+        });
+      }
+      else {
+          this.loadingFlag = false;
+      }
+    
+    },
+
+    handleUpdated: function() {
+      // this.alert_success = true
+      this.loading3 = false
+      setTimeout(function(){
+        this.alert_success = false;
+      },1000);
+    },
+
     makeMap: function(pos){
       var map = new google.maps.Map(document.getElementById('map'), {
           center: pos,
@@ -111,6 +167,7 @@ export default {
       listener
          .on('child_added', (snapshot) => {
             let value = snapshot.val();
+            //console.log(snapshot.key);
             let marker = {
               position: {
                 lat: value.lat, 
@@ -121,10 +178,12 @@ export default {
               // contentString: format(windowContentTemplate, value.img, value.detail, this.convertTimeStampToReableDateTime(value.create_date)),
               contentString: value.detail,
               iconURL: catIconURL,
-              img: value.img
+              img: value.img,
+              uid: value.uid,
+              key: snapshot.key
             }
             //console.log("marker ", marker);
-            this.addMarker(map, marker.position, marker.title, marker.type, marker.img, marker.contentString);
+            this.addMarker(map, marker);
          }, (error) => {
             console.log(error);
          });
@@ -134,8 +193,15 @@ export default {
       let ts = parseInt(timestamp) / 1000
       return moment.unix(ts).format('MMM Do YY')
     },
-
-    addMarker: function(map, position, title, type, img, contentString) {
+    //marker.position, marker.title, marker.type, marker.img, marker.contentString, marker.key,marker.uid;
+    addMarker: function(map, marker) {
+        var position = marker.position;
+        var title = marker.title;
+        var type = marker.type;
+        var img = marker.img;
+        var contentString = marker.contentString;
+        var key = marker.key;
+        var uid = marker.uid;
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
@@ -147,11 +213,13 @@ export default {
         });
 
         marker.addListener('click', () => {
-          console.log("content string ", contentString);
+          //console.log("content string ", contentString);
           this.dialog_detail = contentString;
           this.dialog_title = type;
           this.dialog = true;
           this.dialog_image_url = img;
+          this.dialog_key = key;
+          this.dialog_uid = uid;
           // infowindow.open(map, marker);
         });
     },

@@ -6,8 +6,12 @@
           
         </v-flex>
         <v-flex xs6 order-xs2>
-          <input type="file" accept="image/*" capture="camera" id="imageUrl"  />
-            <img id="frame"><br/>
+          <!--<input type="file" accept="image/*" capture="camera" id="imageUrl" @change="onFileChange"  />
+            <img id="frame"><br/>-->
+
+            <input v-if="imageUrl == ''" type="file" name="imageUrl" class="" id="imageUrl" accept="image/*" @change="onFileChange" >
+            <img v-if="imageUrl" class="user-avatar" v-bind:src="imageUrl" />
+
         </v-flex>
     </v-layout>
     <v-layout row>
@@ -87,37 +91,65 @@ export default {
   },
 
   created: function(){
-   
+   //console.log(firebase.database.ServerValue.TIMESTAMP)
   },
   methods: {
     uploadAvatarFile: function () {
       console.log('Avatar:')
     },
+     onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+        return;
+
+
+      this.uploadFile(
+                  files[0],
+                  'images/helpmepets/'+files[0].name,
+                  (imgURL)=>{
+                    console.log("upload complete callback avatarFile >>", imgURL);
+                        this.imageUrl = imgURL;
+                  }
+                );  
+      this.imageUrl = files[0];
+      console.log('Img : ', files[0]);
+    },
+    uploadFile: function (file, url, callback) {
+        let metadata = {'contentType': file.type};
+        let storageRef = firebase.storage().ref();
+        console.log('url ' + url);
+        storageRef
+          .child(url)
+          .put(file, metadata)
+          .then((snapshot) => {
+            //console.log("upload complete url  >> " + snapshot.downloadURL);
+            callback(snapshot.downloadURL);
+//            firebase.database().ref(fbField).set(url);
+          })
+          .catch((error) => {
+            this.isShowRegisteringProgress = false;
+            this.error = error;
+            console.log(error)
+          });
+      },
     submitform: function () {
       console.log('Submit');
       console.log(this.detail);
       console.log(this.selectType);
-      
+    
+      console.log('Img : ', this.imageUrl);
       console.log('**********************');
       let postData = {};
       postData = {
+          img: this.imageUrl,
           detail: this.detail,
-          type: this.selectType,
-          create_date:''
+          type: this.selectType
         }
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
-            //let lat = position.coords.latitude;
-            //let long = position.coords.longitude;
-             var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-
-            //console.log('position', pos)
-            //console.log('latitude', pos.lat)
-            postData['latitude'] = position.coords.latitude
-            postData['latlongitudeitude'] = position.coords.longitude
+            
+            postData['lat'] = position.coords.latitude
+            postData['long'] = position.coords.longitude
 
           }, function() {
            // this.handleLocationError(true, infoWindow, map.getCenter());
@@ -129,13 +161,13 @@ export default {
 
       
         console.log(postData)
-        var newPostKey = firebase.database().ref().child('helpmepets').push().key;
-        console.log("Key :", newPostKey)
+         var newPostKey = firebase.database().ref().child('helpmepets').push().key;
+        //console.log("Key :", newPostKey)
         var updates = {};
         //Insert projects
         updates['/helpmepets/' + newPostKey] = postData;
         firebase.database().ref().update(updates).then((snapshot) => {
-           console.log('add data:Ok');
+           //console.log('add data:Ok');
           }).catch((error) => {
             
             this.error = error;

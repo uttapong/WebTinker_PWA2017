@@ -5,6 +5,8 @@
 </template>
 <script>
 import {firebase} from '../assets/js/FirebaseConfig'
+var format = require('string-format')
+
 export default {
   name: 'nearby',
   data () {
@@ -55,24 +57,11 @@ export default {
     makeMarkers: function(map) {
       var catIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/cat-marker.png?alt=media&token=2903f888-50d3-49e8-8d85-cab61d8ea3cd";
       var dogIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/dog-marker.png?alt=media&token=af45219c-6a27-4b53-9a1f-7b754b849346";
-      var contentString = '<div id="content">'+
+      var windowContentTemplate = '<div id="content">'+
           '<div id="siteNotice">'+
           '</div>'+
-          '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
           '<div id="bodyContent">'+
-          '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-          'sandstone rock formation in the southern part of the '+
-          'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-          'south west of the nearest large town, Alice Springs; 450&#160;km '+
-          '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-          'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-          'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-          'Aboriginal people of the area. It has many springs, waterholes, '+
-          'rock caves and ancient paintings. Uluru is listed as a World '+
-          'Heritage Site.</p>'+
-          '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-          'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-          '(last visited June 22, 2009).</p>'+
+          '<p>{}{}</p>'+
           '</div>'+
           '</div>';
 
@@ -80,14 +69,14 @@ export default {
       listener
          .on('child_added', (snapshot) => {
             let value = snapshot.val();
-            let marker = { 
+            let marker = {
               position: {
                 lat: value.lat, 
                 lng: value.long, 
               },
               title: "", 
               type: value.type,
-              contentString: contentString,
+              contentString: format(windowContentTemplate, value.detail, " what!!!"),
               iconURL: catIconURL
             }
             console.log("marker ", marker);

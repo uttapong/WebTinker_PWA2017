@@ -4,10 +4,10 @@
   <h2>Member Sign In</h2>
   </div>
   <div class="text-xs-center">
-    <v-btn round class="indigo" large light  @click.native='fbSignIn'> Facebook</v-btn>
+    <v-btn round class="indigo" large light  @click.native='signIn("fb")'> Facebook</v-btn>
   </div>
     <div class="text-xs-center">
-    <v-btn round class="red darken-2" large light > Google</v-btn>
+    <v-btn round class="red darken-2" large light  @click.native='signIn("google")'> Google</v-btn>
   </div>
 </div>
 </template>
@@ -24,6 +24,46 @@ export default {
   },
 
   methods: {
+        signIn(provider) {
+        firebase.auth().getRedirectResult().then((result) => {
+          console.log(result)
+          if (result.credential) {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            let token = result.credential.accessToken;
+            // [START_EXCLUDE]
+            console.log(token)
+          } else {
+            console.log("get token error");
+            // [END_EXCLUDE]
+            if(provider=='fb')var provider = new firebase.auth.FacebookAuthProvider();
+            else var provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('profile');
+            provider.addScope('email');
+
+            this.toggleSignIn(provider)
+          }
+          // The signed-in user info.
+          let user = result.user;
+        }).catch(function (error) {
+          // Handle Errors here.
+          let errorCode = error.code;
+          let errorMessage = error.message;
+          // The email of the user's account used.
+          let email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          let credential = error.credential;
+          // [START_EXCLUDE]
+          if (errorCode === 'auth/account-exists-with-different-credential') {
+            alert('You have already signed up with a different auth provider for that email.');
+            // If you are using multiple auth providers on your app you should handle linking
+            // the user's accounts here.
+          } else {
+            console.error(error);
+          }
+          // [END_EXCLUDE]
+        });
+
+      },
       fbSignIn() {
         firebase.auth().getRedirectResult().then((result) => {
           console.log(result)
@@ -59,49 +99,13 @@ export default {
         });
 
       },
-      fbSignIn() {
-        console.log("xxxxx")
-        firebase.auth().getRedirectResult().then((result) => {
-          console.log(result)
-          if (result.credential) {
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            let token = result.credential.accessToken;
-            // [START_EXCLUDE]
-            console.log(token)
-          } else {
-            console.log("get token error");
-            // [END_EXCLUDE]
-            this.toggleSignIn()
-          }
-          // The signed-in user info.
-          let user = result.user;
-        }).catch(function (error) {
-          // Handle Errors here.
-          let errorCode = error.code;
-          let errorMessage = error.message;
-          // The email of the user's account used.
-          let email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          let credential = error.credential;
-          // [START_EXCLUDE]
-          if (errorCode === 'auth/account-exists-with-different-credential') {
-            alert('You have already signed up with a different auth provider for that email.');
-            // If you are using multiple auth providers on your app you should handle linking
-            // the user's accounts here.
-          } else {
-            console.error(error);
-          }
-          // [END_EXCLUDE]
-        });
-
-      },
-      toggleSignIn(){
+      toggleSignIn(provider){
         if (!firebase.auth().currentUser) {
           // [START createprovider]
-          var provider = new firebase.auth.FacebookAuthProvider();
+          
           // [END createprovider]
           // [START addscopes]
-          provider.addScope('user_birthday');
+          
           // [END addscopes]
           // [START signin]
           firebase.auth().signInWithPopup(provider).then( (result)=> {

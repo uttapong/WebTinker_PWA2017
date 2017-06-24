@@ -77,7 +77,9 @@
           @click.native="submitform"
           :disabled="loading3"
           >Send</v-btn>
-          <v-btn dark default>Cannel</v-btn>
+          <v-btn dark default
+          @click.native="goHome"
+          >Cannel</v-btn>
         </v-flex>
       </v-layout>
   </div>
@@ -146,6 +148,9 @@ export default {
                 );  
       this.imageUrl = files[0];
       console.log('Img : ', files[0]);
+    },
+    goHome: function () {
+     this.$router.go(-1)
     },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
@@ -231,6 +236,8 @@ export default {
            //console.log('add data:Ok');
            this.alert_success = true
            this.loading3 = false
+           //setTimeout(() => (window.location.href = '/'), 2000)
+           //window.location.href = '/';
           }).catch((error) => {
             
             this.error = error;

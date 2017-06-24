@@ -1,18 +1,24 @@
 <template>
-<div id="signin">
-  <div class="text-xs-center">
-  <h2>Member Sign In</h2>
-  </div>
-  <div class="text-xs-center">
-    <v-btn round class="indigo" large light  @click.native='signIn("fb")'> Facebook</v-btn>
-  </div>
-    <div class="text-xs-center">
-    <v-btn round class="red darken-2" large light  @click.native='signIn("google")'> Google</v-btn>
-  </div>
-</div>
+    <div id="signin">
+        <div class="text-xs-center">
+            <h2>
+                Member Sign In
+            </h2>
+        </div>
+        <div class="text-xs-center">
+            <v-btn @click.native='signIn("fb")' class="indigo" large="" light="" round="">
+                Facebook
+            </v-btn>
+        </div>
+        <div class="text-xs-center">
+            <v-btn @click.native='signIn("google")' class="red darken-2" large="" light="" round="">
+                Google
+            </v-btn>
+        </div>
+    </div>
 </template>
 <script>
-import {firebase} from '@/assets/js/FirebaseConfig'
+    import {firebase} from '@/assets/js/FirebaseConfig'
 
 export default {
   name: 'signin',
@@ -147,11 +153,9 @@ export default {
   }
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-  h1, h2 {
+<style scoped="">
+    h1, h2 {
     font-weight: normal;
   }
 

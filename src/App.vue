@@ -37,10 +37,8 @@
                 </template>
             </v-toolbar>
             <main>
-                <v-container fluid="">
-                    <router-view>
-                    </router-view>
-                </v-container>
+                <router-view>
+                </router-view>
             </main>
             <navigation>
             </navigation>
@@ -116,6 +114,7 @@ body {
 
 main {
   text-align: center;
+  min-height: calc(100vh - 56px - 55px) !important;
 }
 
 header {
@@ -135,8 +134,5 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   padding-top: 16px;
-}
-.application--toolbar>main>.container {
-    min-height: calc(100vh - 56px - 55px) !important;
 }
 </style>

@@ -1,39 +1,48 @@
 <template>
-<div id="nearby">
-  <div id="map"></div>
-   <v-layout row justify-center>
-    <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
-      <v-card>
-        <v-card-row>
-          <v-toolbar light>
-            <v-btn icon="icon" @click.native="dialog = false" light>
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
-          </v-toolbar>
-        </v-card-row>
-        <v-divider></v-divider>
-        <v-layout row wrap>
-          <v-flex xs10 offset-xs1>
-            <v-card>
-              <v-card-text>
-                <img width="100%" v-bind:src="dialog_image_url">
-              </v-card-text>
-            </v-card>
-          </v-flex>
-          <v-flex xs10 offset-xs1>
-            <v-card>
-              <v-card-text>{{ dialog_detail }}</v-card-text>
-            </v-card>
-          </v-flex>
+    <div id="nearby">
+        <div id="map">
+        </div>
+        <v-layout justify-center="" row="">
+            <v-dialog :overlay="false" fullscreen="" transition="v-dialog-bottom-transition" v-model="dialog">
+                <v-card>
+                    <v-card-row>
+                        <v-toolbar light="">
+                            <v-btn @click.native="dialog = false" icon="icon" light="">
+                                <v-icon>
+                                    close
+                                </v-icon>
+                            </v-btn>
+                            <v-toolbar-title>
+                                {{ dialog_title }}
+                            </v-toolbar-title>
+                        </v-toolbar>
+                    </v-card-row>
+                    <v-divider>
+                    </v-divider>
+                    <v-layout row="" wrap="">
+                        <v-flex offset-xs1="" xs10="">
+                            <v-card>
+                                <v-card-text>
+                                    <img v-bind:src="dialog_image_url" width="100%">
+                                    </img>
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                        <v-flex offset-xs1="" xs10="">
+                            <v-card>
+                                <v-card-text>
+                                    {{ dialog_detail }}
+                                </v-card-text>
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
+                </v-card>
+            </v-dialog>
         </v-layout>
-      </v-card>
-    </v-dialog>
-  </v-layout>
-</div>
+    </div>
 </template>
 <script>
-import {firebase} from '../assets/js/FirebaseConfig'
+    import {firebase} from '../assets/js/FirebaseConfig'
 var format = require('string-format')
 import moment from 'moment'
 
@@ -84,7 +93,8 @@ export default {
     makeMap: function(pos){
       var map = new google.maps.Map(document.getElementById('map'), {
           center: pos,
-          zoom: 17
+          zoom: 17,
+          fullscreenControl: false
         });
 
       var infoWindow = new google.maps.InfoWindow;
@@ -183,10 +193,9 @@ export default {
   }
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
+<style scoped="">
+    h1, h2 {
     font-weight: normal;
   }
 
@@ -207,7 +216,7 @@ export default {
   /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      min-height: calc(100vh - 56px - 56px - 56px) !important;
+      min-height: calc(100vh - 56px - 56px) !important;
       width: 100%;
     }
 

@@ -92,6 +92,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import {firebase} from '../assets/js/FirebaseConfig'
+import {store} from '../vuex/store'
 
 Vue.use(Vuetify)
 
@@ -123,10 +124,9 @@ export default {
   created: function(){
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
+   console.log('User:', store.state.user.uid)
   },
-  watch: {
-      
-    },
+  watch: {},
   methods: {
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -136,7 +136,7 @@ export default {
 
       this.uploadFile(
                   files[0],
-                  'images/helpmepets/'+files[0].name,
+                  'images/helpmepets/'+store.state.user.uid+'/'+files[0].name,
                   (imgURL)=>{
                     console.log("upload complete callback avatarFile >>", imgURL);
                         this.imageUrl = imgURL;
@@ -175,8 +175,6 @@ export default {
       // console.log('Img : ', this.imageUrl);
       // console.log('**********************');
       //this.loader = null
-     
-       //console.log('Load2:', this[l])
       
       if (this.imageUrl === '' || this.selectType === '' || this.detail === '') {
         this.loading3 = false
@@ -186,6 +184,7 @@ export default {
 
       let postData = {};
       postData = {
+        uid: store.state.user.uid,
         img: this.imageUrl,
         detail: this.detail,
         type: this.selectType,
@@ -210,8 +209,7 @@ export default {
       var updates = {};                
       updates['/helpmepets/' + newPostKey] = postData;
       console.log(postData);
-      firebase.database().ref().update(updates).then((snapshot) => {
-        //console.log('add data:Ok');
+      firebase.database().ref().update(updates).then((snapshot) => {        
         this.alert_success = true
         this.loading3 = false
       }).catch((error) => {

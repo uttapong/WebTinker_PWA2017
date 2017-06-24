@@ -78,7 +78,7 @@ export default {
               contentString: format(windowContentTemplate, value.img, value.detail, "Feb 23, 7:00pm"),
               iconURL: catIconURL
             }
-            console.log("marker ", marker);
+            //console.log("marker ", marker);
             this.addMarker(map, marker.position, marker.title, marker.type, marker.contentString);
          });
 
@@ -176,7 +176,7 @@ export default {
             };
 
             this.makeMap(pos);
-            console.log('position', pos);
+            //console.log('position', pos);
           }, () => {
             this.handleLocationError(true, infoWindow, map.getCenter());
           });

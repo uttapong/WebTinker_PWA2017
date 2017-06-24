@@ -133,6 +133,6 @@ header span {
   padding-top: 16px;
 }
 .application--toolbar>main>.container {
-    min-height: calc(100vh - 56px - 56px) !important;
+    min-height: calc(100vh - 56px - 55px) !important;
 }
 </style>

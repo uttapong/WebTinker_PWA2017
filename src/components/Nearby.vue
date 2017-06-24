@@ -216,8 +216,8 @@ export default {
   /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      min-height: calc(100vh - 56px - 56px - 56px) !important;
-      width: 100%;
+      min-height: calc(100vh - 56px - 56px)!important;
+      margin: -16px;
     }
 
     .container container--fluid {

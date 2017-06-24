@@ -29,7 +29,7 @@
           <v-flex xs10 offset-xs1>
             <v-card>
               <v-card-text>
-                <img width="100%" v-bind:src="dialog_image_url">
+                <img class="dialog_img"  v-bind:src="dialog_image_url">
               </v-card-text>
             </v-card>
           </v-flex>
@@ -290,6 +290,11 @@ export default {
       height: 100% !important;
       margin: 0 !important;
       padding: 0 !important;
+    }
+
+    .dialog_img {
+      min-height: 250px;
+      width:100%;
     }
 
     #columns {

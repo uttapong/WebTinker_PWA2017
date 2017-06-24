@@ -55,8 +55,8 @@ export default {
     },
 
     makeMarkers: function(map) {
-      var catIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/cat-marker.png?alt=media&token=2903f888-50d3-49e8-8d85-cab61d8ea3cd";
-      var dogIconURL = "https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/dog-marker.png?alt=media&token=af45219c-6a27-4b53-9a1f-7b754b849346";
+      var catIconURL = "/static/img/cat-marker.png";
+      var dogIconURL = "/static/img/dog-marker.png";
       var windowContentTemplate = '<div class="columns"> <div id="box1"> <img height="100px" src="{}" /> </div> <div id="box2"> <strong>{}</strong><br /> <i>{}</i> </div> </div>';
 
       let listener = firebase.database().ref("helpmepets");

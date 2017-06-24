@@ -1,6 +1,7 @@
 <template>
 <div id="nearby">
   <div id="map"></div>
+  <!-- support only mobile web screen only. -->
    <v-layout row justify-center>
     <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
       <v-card>
@@ -10,6 +11,11 @@
               <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
+            <v-btn @click.native="gotoHome" icon="" class="blue--text text--lighten-2">
+                <v-icon>
+                    thumb_up
+                </v-icon>
+            </v-btn>
           </v-toolbar>
         </v-card-row>
         <v-divider></v-divider>

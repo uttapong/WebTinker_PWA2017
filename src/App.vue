@@ -49,7 +49,7 @@
     </div>
 </template>
 <script>
-    import Navigation from '@/components/Navigation'
+import Navigation from '@/components/Navigation'
 import {store} from '@/vuex/store'
 import {firebase} from './assets/js/FirebaseConfig'
 
@@ -66,7 +66,7 @@ export default {
       console.log('gotoHome');
       this.$router.push('/');
     },
-
+   
     gotoLogin: function () {
       console.log('gotoLogin');
       this.$router.push('/signin');

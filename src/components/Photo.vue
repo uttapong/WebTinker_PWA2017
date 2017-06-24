@@ -1,19 +1,23 @@
 <template>
   <div class="capture">
   <canvas id="photo"></canvas>
-  <v-layout row>
+  <v-layout row class="camera-btn">
         <v-flex xs4 order-md2 order-xs1>
           <v-btn floating class="amber minor">
       <v-icon light>photo</v-icon>
     </v-btn>
         </v-flex>
         <v-flex xs4 order-md3 order-xs2>
-          <v-btn floating class="deep-orange x-large" @click.native="capture">
+          <v-btn v-if="!isCapture" floating class="deep-orange x-large" @click.native="capture">
+          
       <v-icon light>camera_alt</v-icon>
+    </v-btn>
+    <v-btn v-else floating class="teal x-large" @click.native="confirmImage">
+     <v-icon light>done</v-icon>
     </v-btn>
         </v-flex>
         <v-flex xs4 order-md1 order-xs3>
-         <v-btn floating class="amber minor" @click.native="resume">
+         <v-btn floating class="amber minor" @click.native="resume" :disabled="disabled_retake">
       <v-icon light>replay</v-icon>
     </v-btn>
         </v-flex>
@@ -34,7 +38,9 @@ import {store} from '@/vuex/store'
         photo: document.getElementById('photo'),
         videoDevice: null,
         captureDevice: null,
-        interval:null
+        interval:null,
+        disabled_retake:true,
+        isCapture:false
       }
     },
     methods: {
@@ -50,16 +56,28 @@ import {store} from '@/vuex/store'
         
       },
       capture(){
+        this.isCapture=true;
+        this.stopCamera();
+        this.disabled_retake=false;
+        // this.$router.push('/regispets');
+        // console.log(url)
+      },
+      confirmImage(){
+        
+        this.stopCamera();
         let url=document.getElementById('photo').toDataURL('image/jpeg')
         store.commit('setPhoto', url)
-        this.stopCamera();
+        
         this.$router.push('/regispets');
         // console.log(url)
       },
       resume(){
-        this.stopCamera();
-        store.commit('setPhoto', url)
+        this.disabled_retake=true
+        this.isCapture=false
+        this.stopCamera()
+        store.commit('setPhoto', null)
         navigator.mediaDevices.getUserMedia({video: true}).then(this.getMedia).catch(this.failedToGetMedia);
+        
         //  if (this.videoDevice) this.videoDevice.start(); 
       },
       processPhoto(blob){
@@ -89,7 +107,7 @@ import {store} from '@/vuex/store'
         // console.log(this.videoDevice)
         if (this.interval) clearInterval(this.interval);  // stop frame grabbing
         if (this.videoDevice) this.videoDevice.stop();  // turn off the camera
-        store.commit('setPhoto', url)
+        store.commit('setPhoto', null)
         this.$router.push('/');
       },
       captureVideo(){
@@ -152,5 +170,8 @@ import {store} from '@/vuex/store'
  background: none !important;
  background-color: #FFE5B6 !important;
  
+ }
+ .camera-btn{
+   margin-top: 80px;
  }
 </style>

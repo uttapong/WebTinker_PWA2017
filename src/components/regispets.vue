@@ -83,6 +83,8 @@
           ><v-icon left light>favorite</v-icon> Help this animal</v-btn>
          </div>
          </v-card-text>
+
+         
         </v-flex>
       </v-layout>
   </div>
@@ -182,7 +184,6 @@ export default {
           .put(file, metadata)
           .then((snapshot) => {          
             callback(snapshot.downloadURL);
-//            firebase.database().ref(fbField).set(url);
           })
           .catch((error) => {
             this.isShowRegisteringProgress = false;
@@ -241,20 +242,6 @@ export default {
           // console.log(position);
           postData['lat'] = position.coords.latitude
           postData['long'] = position.coords.longitude
-
-          //Insert projects        
-          var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
-          var updates = {};                
-          updates['/helpmepets/' + newPostKey] = postData;
-          console.log(postData);
-          firebase.database().ref().update(updates).then((snapshot) => {        
-            this.alert_success = true
-            this.loading3 = false
-          }).catch((error) => {
-            
-            this.error = error;
-            alert(error)
-          });
           
           //Insert projects        
           var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
@@ -269,7 +256,7 @@ export default {
           });
         }, function() {
           // this.handleLocationError(true, infoWindow, map.getCenter());
-          console.log("fail update firebase");
+          console.log("fail get geolocation");
         });
       } else {
         // Browser doesn't support Geolocation

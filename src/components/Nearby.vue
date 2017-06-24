@@ -13,12 +13,12 @@
     <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
       <v-card>
         <v-card-row>
-          <v-toolbar light>
+          <v-toolbar class="orange" light>
             <v-btn icon="icon" @click.native="dialog = false" light>
               <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
-            <v-btn @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="blue--text text--lighten-2">
+            <v-btn flat @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="orange white--text text--lighten-2">
                 <v-icon>
                     favorite
                 </v-icon>
@@ -27,16 +27,13 @@
         </v-card-row> 
         <v-layout row wrap>
           <v-flex xs10 offset-xs1>
-            <v-card>
-              <v-card-text>
+            
                 <img class="dialog_img"  v-bind:src="dialog_image_url">
-              </v-card-text>
-            </v-card>
           </v-flex>
           <v-flex xs10 offset-xs1>
-            <v-card>
-              <v-card-text>{{ dialog_detail }}</v-card-text>
-            </v-card>
+           
+              <v-card-text class="detail">{{ dialog_detail }}</v-card-text>
+            
           </v-flex>
         </v-layout>
       </v-card>
@@ -295,6 +292,7 @@ export default {
     .dialog_img {
       min-height: 250px;
       width:100%;
+      border-radius: 10px;
     }
 
     #columns {
@@ -311,4 +309,18 @@ export default {
         display:block;
         clear:both;
     }
+    .detail{
+      margin-top: 15px;
+      padding: 15px;
+      background-color: rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+    }
+
+     .dialog .card{
+ background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+ }
 </style>

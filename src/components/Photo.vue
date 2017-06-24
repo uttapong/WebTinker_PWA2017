@@ -146,7 +146,7 @@ import {store} from '@/vuex/store'
     }
   }
 </script>
-<style >
+<style scoped>
 #photo{
  
   width: 100%;
@@ -173,5 +173,13 @@ import {store} from '@/vuex/store'
  }
  .camera-btn{
    margin-top: 80px;
+ }
+
+  main{
+ background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
  }
 </style>

@@ -304,7 +304,7 @@ a {
   color: #42b983;
 }
 
- #helpmepets {
+ #app {
  background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
  -webkit-background-size: cover;
   -moz-background-size: cover;

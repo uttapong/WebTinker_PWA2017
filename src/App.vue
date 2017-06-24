@@ -146,4 +146,6 @@ header span {
 .application--toolbar>main>.container {
     min-height: calc(100vh - 56px - 55px) !important;
 }
+
+ 
 </style>

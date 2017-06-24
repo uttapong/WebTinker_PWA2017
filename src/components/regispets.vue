@@ -1,6 +1,16 @@
 <template>
   <div id="resgister">
+        <v-alert success  v-model="alert_success">
+          Success, Insert data.
+        </v-alert>
+
+        <v-alert error  v-model="alert_error">
+          Error, Please check data again.
+        </v-alert>
+
+
     <v-layout row>
+        
         <v-flex xs6 order-xs1>
           Pic.
           
@@ -10,7 +20,7 @@
             <img id="frame"><br/>-->
 
             <input v-if="imageUrl == ''" type="file" name="imageUrl" class="" id="imageUrl" accept="image/*" @change="onFileChange" >
-            <img v-if="imageUrl" class="user-avatar" v-bind:src="imageUrl" />
+            <img v-if="imageUrl" class="user-avatar" v-bind:src="imageUrl" width="100px" />
 
         </v-flex>
     </v-layout>
@@ -83,6 +93,8 @@ export default {
       latitude:'',
       longitude:'',
       pos:'',
+      alert_success: false,
+      alert_error: false,
       items: [
           { text: 'Dog' },
           { text: 'Cat' }
@@ -91,12 +103,10 @@ export default {
   },
 
   created: function(){
+    //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
   },
   methods: {
-    uploadAvatarFile: function () {
-      console.log('Avatar:')
-    },
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
@@ -133,17 +143,37 @@ export default {
           });
       },
     submitform: function () {
+      this.alert_success  = false
+      this.alert_error = false
+
       console.log('Submit');
-      console.log(this.detail);
-      console.log(this.selectType);
-    
+      console.log('detail:', this.detail);
+      console.log('Type:', this.selectType);
       console.log('Img : ', this.imageUrl);
       console.log('**********************');
+
+      if (this.imageUrl === '') {
+        this.alert_error = true
+        return false;
+      }
+
+      if (this.detail === '') {
+        this.alert_error = true
+        return false;
+      }
+
+      if (this.selectType === '') {
+        this.alert_error = true
+        return false;
+      }
+
+
       let postData = {};
       postData = {
           img: this.imageUrl,
           detail: this.detail,
-          type: this.selectType
+          type: this.selectType,
+          create_date: firebase.database.ServerValue.TIMESTAMP
         }
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -161,13 +191,14 @@ export default {
 
       
         console.log(postData)
-         var newPostKey = firebase.database().ref().child('helpmepets').push().key;
+        var newPostKey = firebase.database().ref().child('helpmepets').push().key;
         //console.log("Key :", newPostKey)
         var updates = {};
         //Insert projects
         updates['/helpmepets/' + newPostKey] = postData;
         firebase.database().ref().update(updates).then((snapshot) => {
            //console.log('add data:Ok');
+           this.alert_success = true
           }).catch((error) => {
             
             this.error = error;
@@ -199,5 +230,12 @@ li {
 
 a {
   color: #42b983;
+}
+
+.alert_success, .alert_error {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
 }
 </style>

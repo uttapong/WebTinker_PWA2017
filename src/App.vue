@@ -70,10 +70,14 @@ export default {
       }
   },
   computed: {
-      user () {
-        return store.state.user
-      }
+    user () {
+      return store.state.user
     }
+  },
+ created: function(){
+  console.log ('created App.vue ');
+  
+ },
 }
 </script>
 

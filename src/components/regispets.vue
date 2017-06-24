@@ -147,13 +147,11 @@ export default {
     },
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
-        let storageRef = firebase.storage().ref();
-        // console.log('url ' + url);
+        let storageRef = firebase.storage().ref();        
         storageRef
           .child(url)
           .put(file, metadata)
-          .then((snapshot) => {
-            //console.log("upload complete url  >> " + snapshot.downloadURL);
+          .then((snapshot) => {          
             callback(snapshot.downloadURL);
 //            firebase.database().ref(fbField).set(url);
           })
@@ -190,36 +188,38 @@ export default {
         type: this.selectType,
         create_date: firebase.database.ServerValue.TIMESTAMP
       }
+      var objTmp = this;
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
           // console.log(position);
           postData['lat'] = position.coords.latitude
           postData['long'] = position.coords.longitude
           
+          //Insert projects        
+          var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
+          var updates = {};                
+          updates['/helpmepets/' + newPostKey] = postData;
+          console.log(updates);          
+          
+          firebase.database().ref().update(updates).then((snapshot) => {             
+            objTmp.handleUpdated();
+          }).catch((error) => {              
+            console.log(error);
+          });
         }, function() {
           // this.handleLocationError(true, infoWindow, map.getCenter());
+          console.log("fail update firebase");
         });
       } else {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, infoWindow, map.getCenter());
       }
-      
-      //Insert projects        
-      var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
-      var updates = {};                
-      updates['/helpmepets/' + newPostKey] = postData;
-      console.log(postData);
-      firebase.database().ref().update(updates).then((snapshot) => {        
-        this.alert_success = true
-        this.loading3 = false
-      }).catch((error) => {
-        
-        this.error = error;
-        alert(error)
-      });
-        
-
      /* console.log($('#camera')[0].files[0])*/
+    },
+
+    handleUpdated: function() {
+      this.alert_success = true
+      this.loading3 = false
     },
 
     handleLocationError: function(browserHasGeolocation, infoWindow, pos) {

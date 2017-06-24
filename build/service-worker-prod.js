@@ -35,8 +35,11 @@
                     // fresh content will have been added to the cache.
                     // It's the perfect time to display a "New content is
                     // available; please refresh." message in the page's interface.
+                    console.log('[service-worker] installed');
                     break;
-
+                  case 'fetch':
+                    console.log('[service-worker] fetch');
+                    break;
                   case 'redundant':
                     throw new Error('The installing ' +
                                     'service worker became redundant.');

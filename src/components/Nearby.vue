@@ -111,10 +111,11 @@ export default {
               type: value.type,
               // contentString: format(windowContentTemplate, value.img, value.detail, this.convertTimeStampToReableDateTime(value.create_date)),
               contentString: value.detail,
-              iconURL: catIconURL
+              iconURL: catIconURL,
+              img: value.img
             }
             //console.log("marker ", marker);
-            this.addMarker(map, marker.position, marker.title, marker.type, marker.contentString);
+            this.addMarker(map, marker.position, marker.title, marker.type, marker.img, marker.contentString);
          }, (error) => {
             console.log(error);
          });
@@ -125,7 +126,7 @@ export default {
       return moment.unix(ts).format('MMM Do YY')
     },
 
-    addMarker: function(map, position, title, type, contentString) {
+    addMarker: function(map, position, title, type, img, contentString) {
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
@@ -141,6 +142,7 @@ export default {
           this.dialog_detail = contentString;
           this.dialog_title = type;
           this.dialog = true;
+          this.dialog_image_url = img;
           // infowindow.open(map, marker);
         });
     },

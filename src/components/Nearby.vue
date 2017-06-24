@@ -186,7 +186,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
   h1, h2 {
     font-weight: normal;
   }
@@ -208,9 +207,16 @@ export default {
   /* Always set the map height explicitly to define the size of the div
      * element that contains the map. */
     #map {
-      height: 700px;
+      min-height: calc(100vh - 56px - 56px - 56px) !important;
       width: 100%;
     }
+
+    .container container--fluid {
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     #columns {
         width:100px
     }

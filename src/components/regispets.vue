@@ -133,6 +133,7 @@ export default {
       if (!files.length)
         return;
 
+      console.log(files);
 
       this.uploadFile(
                   files[0],
@@ -145,6 +146,7 @@ export default {
       this.imageUrl = files[0];
       // console.log('Img : ', files[0]);
     },
+
     uploadFile: function (file, url, callback) {
         let metadata = {'contentType': file.type};
         let storageRef = firebase.storage().ref();
@@ -195,6 +197,20 @@ export default {
           // console.log(position);
           postData['lat'] = position.coords.latitude
           postData['long'] = position.coords.longitude
+
+          //Insert projects        
+          var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
+          var updates = {};                
+          updates['/helpmepets/' + newPostKey] = postData;
+          console.log(postData);
+          firebase.database().ref().update(updates).then((snapshot) => {        
+            this.alert_success = true
+            this.loading3 = false
+          }).catch((error) => {
+            
+            this.error = error;
+            alert(error)
+          });
           
         }, function() {
           // this.handleLocationError(true, infoWindow, map.getCenter());
@@ -203,20 +219,6 @@ export default {
         // Browser doesn't support Geolocation
         this.handleLocationError(false, infoWindow, map.getCenter());
       }
-      
-      //Insert projects        
-      var newPostKey = firebase.database().ref().child('helpmepets').push().key;        
-      var updates = {};                
-      updates['/helpmepets/' + newPostKey] = postData;
-      console.log(postData);
-      firebase.database().ref().update(updates).then((snapshot) => {        
-        this.alert_success = true
-        this.loading3 = false
-      }).catch((error) => {
-        
-        this.error = error;
-        alert(error)
-      });
         
 
      /* console.log($('#camera')[0].files[0])*/

@@ -1,47 +1,54 @@
 <template>
-  <div id="app">
-   <v-app id="helpmepets">
-    <v-toolbar class="transparent elevation-0"  >
-    
-    <v-toolbar-title class="text-center" ></v-toolbar-title>
-    <v-spacer></v-spacer>
-     <v-btn icon @click.native="gotoHome">
-      <v-icon>home</v-icon>
-    </v-btn>
-    
-    <template v-if="this.user">
-   
-    <v-btn icon @click.native="gotoRegisPets">
-      <v-icon>add_circle</v-icon>
-    </v-btn>
-  
-    <v-btn icon @click.native="signOut">
-      <v-icon>exit_to_app</v-icon>
-    </v-btn>
-     <v-btn icon @click.native="gotoLogin">
-      <div class="profile-img"><img :src='user.photoURL' :alt="user.displayName"></img></div>
-    </v-btn>
-    </template>
-    <template v-else>
-     <v-btn icon @click.native="gotoLogin">
-      <v-icon>account_circle</v-icon>
-    </v-btn>
-    </template>
-  </v-toolbar>
-    <main>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </main>
-    
-      <Navigation></Navigation>
-  </v-app>
-      
-  </div>
+    <div id="app">
+        <v-app id="helpmepets">
+            <v-toolbar class="transparent elevation-0">
+                <v-toolbar-title class="text-center">
+                </v-toolbar-title>
+                <v-spacer>
+                </v-spacer>
+                <v-btn @click.native="gotoHome" icon="">
+                    <v-icon>
+                        home
+                    </v-icon>
+                </v-btn>
+                <template v-if="this.user">
+                    <v-btn @click.native="gotoRegisPets" icon="">
+                        <v-icon>
+                            add_circle
+                        </v-icon>
+                    </v-btn>
+                    <v-btn @click.native="signOut" icon="">
+                        <v-icon>
+                            exit_to_app
+                        </v-icon>
+                    </v-btn>
+                    <v-btn @click.native="gotoLogin" icon="">
+                        <div class="profile-img">
+                            <img :alt="user.displayName" :src="user.photoURL"/>
+                        </div>
+                    </v-btn>
+                </template>
+                <template v-else="">
+                    <v-btn @click.native="gotoLogin" icon="">
+                        <v-icon>
+                            account_circle
+                        </v-icon>
+                    </v-btn>
+                </template>
+            </v-toolbar>
+            <main>
+                <v-container fluid="">
+                    <router-view>
+                    </router-view>
+                </v-container>
+            </main>
+            <navigation>
+            </navigation>
+        </v-app>
+    </div>
 </template>
-
 <script>
-import Navigation from '@/components/Navigation'
+    import Navigation from '@/components/Navigation'
 import {store} from '@/vuex/store'
 import {firebase} from './assets/js/FirebaseConfig'
 
@@ -76,9 +83,8 @@ export default {
     }
 }
 </script>
-
 <style>
-.profile-img{
+    .profile-img{
   display:inline;
 }
 .profile-img img{
@@ -106,7 +112,6 @@ body {
 
 main {
   text-align: center;
-  margin-top: 40px;
 }
 
 header {
@@ -126,5 +131,8 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   padding-top: 16px;
+}
+.application--toolbar>main>.container {
+    min-height: calc(100vh - 56px - 56px) !important;
 }
 </style>

@@ -17,17 +17,17 @@
                 <v-card>
                     <v-list three-line="">
                         <template v-for="item in items">
-                            <v-list-tile avatar="">
+                            <v-list-tile class="list-pet" avatar="">
                                 <v-list-tile-avatar>
                                     <img v-bind:src="item.avatar"/>
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
-                                    <v-list-tile-title v-html="item.title">
+                                    <v-list-tile-title class="orange--text" v-html="item.title">
                                     </v-list-tile-title>
                                     <v-list-tile-sub-title v-html="item.subtitle">
                                     </v-list-tile-sub-title>
-                                    <v-flex offset-xs8="" xs5="">
-                                        <v-btn @click.native="share" class="green--text darken-1" flat="flat">
+                                    <v-flex offset-xs8="" class="share" xs5="">
+                                        <v-btn @click.native="share"  class="indigo grey--text darken-1" flat="flat">
                                             <network class="text-xs-right" network="facebook">
                                                 <i class="fa fa-facebook">
                                                 </i>
@@ -235,5 +235,19 @@ export default {
           min-height: calc(100vh - 56px - 56px)!important;
           margin: -10px;
         
+     }
+     .list__tile__title{
+       margin-top: 6px;
+     }
+     .list__tile__content{
+       display:block !important;
+     }
+     .share{
+           position: absolute;
+    top: 10px;
+    right: 10px;
+     }
+     .list-pet{
+      border-bottom: 2px solid #FF9800;
      }
 </style>

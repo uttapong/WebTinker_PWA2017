@@ -6,11 +6,11 @@
               </h2>
           </div>
           
-          <!--<div class="text-xs-center">
+          <div class="text-xs-center">
               <v-btn @click.native='signIn("fb")' large class="indigo"  light="" round="">
                   Facebook
               </v-btn>
-          </div>-->
+          </div>
           <div class="text-xs-center">
               <v-btn @click.native='signIn("google")' large class="red darken-2" light="" round="">
                    Google 

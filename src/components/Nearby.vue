@@ -235,9 +235,8 @@ export default {
                 }
                 console.log('curObj', curObj);
               });
-              this.dialog = true; 
           }
-          
+          this.dialog = true; 
         });
     },
 

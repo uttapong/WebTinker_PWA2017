@@ -44,7 +44,10 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/image-capture')]
+        include: [resolve('src'), resolve('test')],
+        options: {
+          presets: ['es2015','es2016']
+        }
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

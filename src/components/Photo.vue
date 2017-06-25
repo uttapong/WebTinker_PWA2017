@@ -3,7 +3,7 @@
   <canvas id="photo"></canvas>
   <v-layout row class="camera-btn">
         <v-flex xs4 order-md2 order-xs1>
-          <v-btn floating class="amber minor">
+          <v-btn floating class="amber minor" @click.native="gotoRegisPets">
       <v-icon light>photo</v-icon>
     </v-btn>
         </v-flex>
@@ -22,12 +22,31 @@
     </v-btn>
         </v-flex>
       </v-layout>
+
+  <v-layout  v-if="show_switch" row class="camera-switch">
+        <v-flex xs4 order-md2 order-xs1>
+          
+      <v-icon light>photo</v-icon>
+    </v-btn>
+        </v-flex>
+        <v-flex xs4 order-md3 order-xs2>
+          <v-btn small floating class="amber minor" @click.native="switchDevice">
+          
+      <v-icon light>autorenew</v-icon>
+    </v-btn>
+        </v-flex>
+        <v-flex xs4 order-md1 order-xs3>
+         
+      <v-icon light>replay</v-icon>
+    </v-btn>
+        </v-flex>
+      </v-layout>
   </div>
   
 </template>
 
 <script>
-import imageCapture from 'image-capture'
+// import ImageCapturePhoto from 'image-capture'
 import {store} from '@/vuex/store'
   export default {
     name: 'photo',
@@ -40,14 +59,41 @@ import {store} from '@/vuex/store'
         captureDevice: null,
         interval:null,
         disabled_retake:true,
-        isCapture:false
+        isCapture:false,
+        devices:[],
+        currentDevice:''
       }
     },
+    watch: {
+    currentDevice: function (newDevice) {
+      // `this` points to the vm instance
+      if(this.currentDevice!=newDevice)this.selectDevice(this.newDevice)
+    }
+
+  },
+  computed: {
+    show_switch: function () {
+      // `this` points to the vm instance
+      
+      return this.devices.length>1
+    }
+
+  },
     methods: {
+      gotoRegisPets: function () {
+        console.log('gotoRegisPets');  
+        store.commit('setPhoto', null)    
+      this.$router.push('/regispets');
+    }, 
       getMedia(mediaStream){
        
         // Extract video track. 
-        this.videoDevice = mediaStream.getVideoTracks()[0];
+        if(mediaStream.getVideoTracks()[1])
+          this.videoDevice = mediaStream.getVideoTracks()[1];
+        else this.videoDevice = mediaStream.getVideoTracks()[0];
+        // console.log(mediaStream.getTracks())
+        console.log('Using camera '+this.videoDevice.label);
+
         this.captureDevice = new ImageCapture(this.videoDevice);
         // console.log(this.captureDevice)
         if (this.captureDevice) {
@@ -81,7 +127,7 @@ import {store} from '@/vuex/store'
         //  if (this.videoDevice) this.videoDevice.start(); 
       },
       processPhoto(blob){
-        console.log(blob)
+        // console.log(blob)
         this.photo.src = window.URL.createObjectURL(blob);
       },
       failedToGetMedia(msg){
@@ -89,14 +135,16 @@ import {store} from '@/vuex/store'
           // this.stopMedia()
       },
       processFrame(imageBitmap){
-        console.log(imageBitmap.width)
+        console.log(imageBitmap.height)
+         let fixHeight=480;
         document.getElementById('photo').width = imageBitmap.width;
-        document.getElementById('photo').height = imageBitmap.height;
-        // this.photo.height = imageBitmap.height;
-        // console.log(imageBitmap)
-        // this.photo.width = 640;
-        // this.photo.height = 640;
-        document.getElementById('photo').getContext('2d').drawImage(imageBitmap, 0, 0,imageBitmap.width,imageBitmap.height);
+        document.getElementById('photo').height = fixHeight;
+        let margin=0;
+        // console.log(((imageBitmap-fixHeight)/2))
+        let ctx = document.getElementById('photo').getContext('2d')
+        ctx.rect(0, 0, imageBitmap.width,fixHeight)
+        ctx.clip()
+        ctx.drawImage(imageBitmap, 0, -1*(imageBitmap.height-fixHeight)/2,imageBitmap.width,imageBitmap.height);
       },
       stopCamera(){
         // console.log(this.videoDevice)
@@ -116,33 +164,50 @@ import {store} from '@/vuex/store'
       this.captureDevice.grabFrame().then(this.processFrame).catch(error => {
         console.log( 'Error while grabbing frame: '+error)
       });
+      },
+      getDevices(){
+        navigator.mediaDevices.enumerateDevices()
+        .then((alldevices)=> {
+          alldevices.forEach((device)=> {
+            // console.log(device)
+            if(device.kind=='videoinput')this.devices.push(device.deviceId)
+            // console.log('afasdfasfdadfafadfdafadf')
+            // console.log(this.devices);
+          });
+        })
+        .catch((err)=> {
+          console.log(err.name + ": " + err.message);
+        });
+      },
+      selectDevice(id){
+        let constraints = {
+          video: {
+            optional: [{
+              sourceId: id
+            }]
+          }
+        };
+        navigator.mediaDevices.getUserMedia(constraints).then(this.getMedia).catch(this.failedToGetMedia);
+      },
+      switchDevice(){
+        if(this.currentDevice==this.devices[0])this.currentDevice=this.devices[1]
+        else this.currentDevice=this.devices[0]
       }
       // captureDevice.takePhoto().then(processPhoto).catch(error => {
       //   err((new Date()).toISOString(), 'Error while taking photo:', error);
       // });
     },
     created:function(){
-        // let canvas = document.getElementById('canvas');
-        // let this.photo = x;
+        this.getDevices()
+        // console.log(this.devices)
+        this.currentDevice=this.devices[0]
+        this.selectDevice(this.currentDevice)
+        // navigator.mediaDevices.getUserMedia({video: true}).then(this.getMedia).catch(this.failedToGetMedia);
         
-        navigator.mediaDevices.getUserMedia({video: true}).then(this.getMedia).catch(this.failedToGetMedia);
-        
-        
-
-        // function processFrame(imageBitmap) {
-        // canvas.width = imageBitmap.width;
-        // canvas.height = imageBitmap.height;
-        // canvas.width = 640;
-        // canvas.height = 640;
-        // canvas.getContext('2d').drawImage(imageBitmap, 0, 0);
-        // }
-        // console.log('xxx')
-        // console.log(this.photo)
-        // console.log(document.getElementById('photo'))
-        // document.getElementById('photo').addEventListener('load', ()=> {
-        // // After the image loads, discard the image object to release the memory 
-        //   window.URL.revokeObjectURL(this.photo.src);
-        // });
+    },
+    beforeDestroy:function(){
+       if (this.interval) clearInterval(this.interval); 
+       if (this.videoDevice) this.videoDevice.stop(); 
     }
   }
 </script>
@@ -172,7 +237,7 @@ import {store} from '@/vuex/store'
  
  }
  .camera-btn{
-   margin-top: 80px;
+   margin-top: 40px;
  }
 
   main{

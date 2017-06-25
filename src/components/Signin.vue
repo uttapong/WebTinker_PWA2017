@@ -46,7 +46,7 @@ export default {
       signIn(type) {
           var loginType = type;
           firebase.auth().getRedirectResult().then((result) => {
-            console.log(result)
+            console.log("signIn result: ",result)
             if (result.credential) {
               // This gives you a Facebook Access Token. You can use it to access the Facebook API.
               let token = result.credential.accessToken;
@@ -70,9 +70,9 @@ export default {
             }
             // The signed-in user info.
             let user = result.user;
-            if(user) {
-              this.$router.push('/');
-            }
+            // if(user) {
+            //   this.$router.push('/');
+            // }
           }).catch(function (error) {
             // Handle Errors here.
             let errorCode = error.code;
@@ -109,9 +109,9 @@ export default {
           }
           // The signed-in user info.
           let user = result.user;
-          if(user) {
-            this.$router.push('/');
-          }
+          // if(user) {
+          //   this.$router.push('/');
+          // }
         }).catch(function (error) {
           // Handle Errors here.
           let errorCode = error.code;
@@ -142,9 +142,9 @@ export default {
             // The signed-in user info.
             var user = result.user;
             // console.log('fb user returned')
-            if(user) {
-              this.$router.push('/');
-            }
+            // if(user) {
+            //   this.$router.push('/');
+            // }
 
           }).catch(function (error) {
             // Handle Errors here.

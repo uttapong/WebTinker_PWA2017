@@ -1,10 +1,10 @@
 <template>
   <v-card height="55px">
     <v-bottom-nav absolute value="true" class="transparent">
-      <v-btn flat dark class="orange--text" @click.native="gotoSearch"  :value="e1 === 1">
+     <!-- <v-btn flat dark class="orange--text" @click.native="gotoSearch"  :value="e1 === 1">
         <span>Search</span>
         <v-icon>search</v-icon>
-      </v-btn>
+      </v-btn>-->
       
       <v-btn flat dark class="orange--text" @click.native="gotoNearby" :value="e1 === 3">
         <span>Nearby</span>

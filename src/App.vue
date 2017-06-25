@@ -90,7 +90,11 @@ export default {
   },
   computed: {
     user () {
-      return store.state.user
+        console.log("computed user:",store.state.user);
+        if (this.$route.name == 'Signin' && store.state.user!=null) {
+            this.$router.push('/');
+        }
+        return store.state.user
     }
   },
  created: function(){

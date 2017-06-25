@@ -194,13 +194,25 @@ import {store} from '@/vuex/store'
         }
       },
       checkCompat(){
-        if(!navigator.mediaDevices)this.$router.push('/regispets');
+        // this.stopCamera()
+        if(!navigator.mediaDevices){
+          this.stopCamera()
+          this.$router.push('/regispets');
+        }
+      },
+      checkLogin(){
+        
+        if(!store.state.user){
+          this.stopCamera()
+          this.$router.push('/signin');}
       }
       // captureDevice.takePhoto().then(processPhoto).catch(error => {
       //   err((new Date()).toISOString(), 'Error while taking photo:', error);
       // });
     },
     created:function(){
+        this.checkLogin()
+        if(store.state.user){
         this.checkCompat()
         this.getDevices()
         // console.log(this.devices)
@@ -208,6 +220,7 @@ import {store} from '@/vuex/store'
         else this.currentDevice=this.devices[0]
         
         this.selectDevice(this.currentDevice)
+        }
         // navigator.mediaDevices.getUserMedia({video: true}).then(this.getMedia).catch(this.failedToGetMedia);
         
     },

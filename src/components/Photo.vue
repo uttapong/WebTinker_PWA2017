@@ -25,9 +25,7 @@
 
   <v-layout  v-if="show_switch" row class="camera-switch">
         <v-flex xs4 order-md2 order-xs1>
-          
-      <v-icon light>photo</v-icon>
-    </v-btn>
+
         </v-flex>
         <v-flex xs4 order-md3 order-xs2>
           <v-btn small floating class="amber minor" @click.native="switchDevice">
@@ -36,9 +34,7 @@
     </v-btn>
         </v-flex>
         <v-flex xs4 order-md1 order-xs3>
-         
-      <v-icon light>replay</v-icon>
-    </v-btn>
+
         </v-flex>
       </v-layout>
   </div>
@@ -68,7 +64,7 @@ import {store} from '@/vuex/store'
     show_switch: function () {
       // `this` points to the vm instance
       
-      return this.devices.length>1
+      return this.devices.length>0
     }
 
   },
@@ -235,7 +231,7 @@ import {store} from '@/vuex/store'
   width: 48px;
 }
 .minor{
-  margin-top: 30px;
+  margin-top: 0px;
 }
 
  #helpmepets {

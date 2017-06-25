@@ -105,9 +105,9 @@ export default {
 
     addFav: function (key) {
       //console.log(key);
-      let uid = store.state.user.uid;
+      let uid = (store.state.user!=null)?store.state.user.uid:null;
       
-      if (uid && uid != '' && this.loadingFlag==false) {
+      if (uid!=null && uid != '' && this.loadingFlag==false) {
         this.loadingFlag = true;
         let postData = {};
         postData = {
@@ -246,9 +246,9 @@ export default {
 
     getshareTitle: function(animalType) {
       if (animalType.toLowerCase() === "cat") {
-          return 'มีแมวหลง';
+          return 'มีแมวต้องการความช่วยเหลือ';
       }
-      return 'มีหมาหลง';
+      return 'มีหมาต้องการความช่วยเหลือ';
     },
 
     getIconURL: function(type) {

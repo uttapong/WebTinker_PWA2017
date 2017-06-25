@@ -1,21 +1,21 @@
 <template>
-    <div id="signin">
-        <div class="text-xs-center">
-            <h2>
-                Member Sign In
-            </h2>
-        </div>
-        <div class="text-xs-center">
-            <v-btn @click.native='signIn("fb")' class="indigo" large="" light="" round="">
-                Facebook
-            </v-btn>
-        </div>
-        <div class="text-xs-center">
-            <v-btn @click.native='signIn("google")' class="red darken-2" large="" light="" round="">
-                Google
-            </v-btn>
-        </div>
-    </div>
+      <div id="signin">
+          <div class="text-xs-center">
+              <h2>
+                  Sign In
+              </h2>
+          </div>
+          <div class="text-xs-center">
+              <v-btn @click.native='signIn("fb")' large class="indigo"  light="" round="">
+                  Facebook
+              </v-btn>
+          </div>
+          <div class="text-xs-center">
+              <v-btn @click.native='signIn("google")' large class="red darken-2" light="" round="">
+                   Google 
+              </v-btn>
+          </div>
+      </div>
 </template>
 <script>
     import {firebase} from '@/assets/js/FirebaseConfig'

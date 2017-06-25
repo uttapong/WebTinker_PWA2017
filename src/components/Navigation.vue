@@ -27,6 +27,22 @@ export default {
         e1: 3
       }
     },
+    created: function() {
+      console.log("current route: ",this.$route.name);
+      let curRouteName = this.$route.name;
+      if (curRouteName == "Signin") {
+        //this.e1 = 1;
+      } 
+      else if (curRouteName == "Nearby" || curRouteName == "Search") {
+        this.e1 = 3;
+      }
+      else if (curRouteName == "Resgister" || curRouteName == "Photo") {
+        this.e1 = 3;
+      }
+      else if (curRouteName == "Favorite") {
+        this.e1 = 2;
+      }
+    },
     methods : {
       gotoSearch: function () {
         console.log('gotoSearch');

@@ -1,6 +1,18 @@
 <template>
 <div id="FavoritePage">
-  <v-layout row justify-center>
+    <div id="signin" v-if="uid ==null">
+        <div class="text-xs-center">
+            <h2>
+               Please Sign In
+            </h2>
+        </div>
+        <div class="text-xs-center">
+            <v-btn @click.native='gotoSignIn' class="deep-orange" large="" light="" round="">
+                Sign-In
+            </v-btn>
+        </div>    
+    </div>
+  <v-layout row justify-center v-if="uid !=null">
     
     <v-flex xs12 sm6 offset-sm3>
       <v-card>       
@@ -64,6 +76,7 @@ export default {
   data () {
       return {
         items: [],
+        uid: null,
         dialog: false,
         dialog_detail: "",
         dialog_title: "",
@@ -73,10 +86,13 @@ export default {
       }
   },
   created: function(){
-    this.loadUserFav();
+    this.loadUserFav();    
   },
 
   methods: {
+    gotoSignIn: function() {
+        this.$router.push('/signin');
+    },
     showDetail: function(dataPet) {
         console.log('showDetail', dataPet);
         this.dialog_detail = dataPet.subtitle;
@@ -88,10 +104,11 @@ export default {
         this.dialog = true;
     },
     loadUserFav: function() {
-        let uid = store.state.user.uid;
+        let uid = (store.state.user!=null)?store.state.user.uid:null;
         let curObj = this;
         //console.log("uid", uid);
-        if (uid && uid != '') {
+        if (uid!=null && uid != '') {
+            this.uid = uid;
             let usersFavRef = firebase.database().ref();
             usersFavRef.child('helpmepets_favorite').orderByChild("uid").equalTo(uid).on('child_added', function(snapshot) {
                 console.log(snapshot.val());   
@@ -113,6 +130,7 @@ export default {
                 });             
             });
         }
+    
     }    
   }
 }

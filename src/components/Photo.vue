@@ -121,6 +121,7 @@ import {store} from '@/vuex/store'
       },
       failedToGetMedia(msg){
           console.log(msg)
+          this.$router.push('/regispets');
           // this.stopMedia()
       },
       processFrame(imageBitmap){
@@ -191,12 +192,16 @@ import {store} from '@/vuex/store'
           this.stopCamera()
           this.selectDevice(this.currentDevice)
         }
+      },
+      checkCompat(){
+        if(!navigator.mediaDevices)this.$router.push('/regispets');
       }
       // captureDevice.takePhoto().then(processPhoto).catch(error => {
       //   err((new Date()).toISOString(), 'Error while taking photo:', error);
       // });
     },
     created:function(){
+        this.checkCompat()
         this.getDevices()
         // console.log(this.devices)
         if(this.devices[1])this.currentDevice=this.devices[1]

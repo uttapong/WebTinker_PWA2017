@@ -27,10 +27,10 @@
                         </v-card-text>
                     </v-card-row>
                     <v-card-row actions="">
-                        <v-btn @click.native="" class="green--text darken-1" flat="flat">
-                            <v-icon>
-                                share
-                            </v-icon>
+                        <v-btn @click.native="share" class="green--text darken-1" flat="flat">
+                            <network network="facebook">
+                                <i class="fa fa-facebook"></i>
+                            </network>
                         </v-btn>
                         <v-btn :disabled="loadingFlag" :loading="loadingFlag" @click.native="addFav({dialog_key})" class="btn--dark orange white--text text--lighten-2" flat="" v-if="dialog_favAlready == false">
                             <v-icon>
@@ -56,9 +56,12 @@
 import {store} from '../vuex/store'
 import moment from 'moment'
 var format = require('string-format')
+var SocialSharing = require('vue-social-sharing');
 
 export default {
   name: 'nearby',
+  component : {
+  },
   data () {
     return {
         loadingFlag: false,  
@@ -77,6 +80,7 @@ export default {
     this.handleCache();
     this.getCurrentLocation();
     this.initialMap();
+
   },
 
   methods: {
@@ -285,12 +289,15 @@ export default {
     },
 
     share: function() {
-      navigator.share({
-          title: this.shareTitle,
-          text: this.shareText,
-          url: window.location.href
-      }).then(() => console.log('Successful share'))
-      .catch(error => console.log('Error sharing:', error));
+      console.log("shere");
+      FB.ui({
+        display: 'popup',
+        method: 'share_open_graph',
+        action_type: 'og.likes',
+        action_properties: JSON.stringify({
+            object:window.location.href,
+        })
+      }, function(response){});
     }
   }
 }

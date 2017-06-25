@@ -132,6 +132,8 @@ export default {
   },
 
   created: function(){
+    if(!store.state.user) this.$router.push('/signin')
+    else{
     if(store.state.uploadPhoto){
       this.imageUrl=store.state.uploadPhoto
 
@@ -146,6 +148,7 @@ export default {
     //this.alert_success = true
    //console.log(firebase.database.ServerValue.TIMESTAMP)
    console.log('User:', store.state.user.uid)
+    }
   },
   watch: {
     selectType: function () {

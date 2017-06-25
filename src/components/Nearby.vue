@@ -221,7 +221,8 @@ export default {
           this.dialog_image_url = img;
           this.dialog_key = key;
           this.dialog_uid = uid;
-          let uid = store.state.user.uid;
+          console.log(store.state.user);
+          let uid = (store.state.user!=null)?store.state.user.uid:null;
           var curObj = this;
 
           if (uid && uid != '') {
@@ -244,7 +245,7 @@ export default {
     },
 
     getshareTitle: function(animalType) {
-      if (type.toLowerCase() === "cat") {
+      if (animalType.toLowerCase() === "cat") {
           return 'มีแมวหลง';
       }
       return 'มีหมาหลง';

@@ -11,11 +11,11 @@
                   Facebook
               </v-btn>
           </div>
-          <!--<div class="text-xs-center">
+          <div class="text-xs-center">
               <v-btn @click.native='signIn("google")' large class="red darken-2" light="" round="">
                    Google 
               </v-btn>
-          </div>-->
+          </div>
       </div>
 </template>
 <script>
@@ -56,7 +56,7 @@ export default {
               //console.log("get token error");
               // [END_EXCLUDE]
               console.log("loginType is ", loginType);
-              let provider;
+              var provider;
               if(loginType=='fb') {
                 provider= new firebase.auth.FacebookAuthProvider();
               }

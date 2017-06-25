@@ -11,9 +11,6 @@
         <!-- support only mobile web screen only. -->
         <v-layout justify-center="" row="">
             <v-dialog v-model="dialog">
-                <v-btn light="" primary="" slot="activator">
-                    Open Dialog
-                </v-btn>
                 <v-card>
                     <v-card-row>
                         <v-card-title>
@@ -321,7 +318,7 @@ export default {
      * element that contains the map. */
     #map {
       min-height: calc(100vh - 56px - 56px)!important;
-      margin: -16px;
+      margin-top: -16px;
     }
 
     .container container--fluid {

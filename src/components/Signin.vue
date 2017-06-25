@@ -29,10 +29,10 @@ export default {
 
   created: function(){   
     //this.checkLoginYet();
-    var thisObj = this;
-    setTimeout(function() {
-      thisObj.checkLoginYet();
-    },3000);
+    // var thisObj = this;
+    // setTimeout(function() {
+    //   thisObj.checkLoginYet();
+    // },3000);
   }, 
   methods: {
       checkLoginYet() {

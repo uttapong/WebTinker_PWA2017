@@ -113,24 +113,7 @@ export default {
                 });             
             });
         }
-    }
-    //     listener
-    //         .on('child_added', (snapshot) => {
-    //             let value = snapshot.val();
-    //             //console.log(snapshot.key);
-    //             let favData = {                
-    //                 uid: value.uid,
-    //                 helpmepets_key: value.helpmepets_key,
-    //                 create_date: value.create_date,
-    //                 key: snapshot.key
-    //             }
-    //             this.items.push(favData);
-    //             console.log("favListData ", favData);
-                
-    //         }, (error) => {
-    //             console.log(error);
-    //         });
-    //    }
+    }    
   }
 }
 </script>

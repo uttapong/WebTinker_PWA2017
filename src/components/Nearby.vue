@@ -18,11 +18,19 @@
               <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
-            <v-btn flat @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="orange white--text text--lighten-2">
+
+            <v-btn v-if="dialog_favAlready == false" flat @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="btn--dark orange white--text text--lighten-2">
                 <v-icon>
                     favorite
                 </v-icon>
             </v-btn>
+
+            <v-btn v-if="dialog_favAlready == true" flat  :disabled="true" class="btn--dark orange darken-4 white--text text--lighten-2">
+                <v-icon>
+                    favorite
+                </v-icon>
+            </v-btn>
+
           </v-toolbar>
         </v-card-row> 
         <v-layout row wrap>
@@ -60,6 +68,7 @@ export default {
         dialog_title: "",
         dialog_key: "",
         dialog_uid: "",
+        dialog_favAlready: false,
         dialog_image_url: 'https://firebasestorage.googleapis.com/v0/b/webtinker-c0bd8.appspot.com/o/images%2Fhelpmepets%2F1423749169-image-o.jpg?alt=media&token=a2ec52ce-7196-4c77-81fd-bccdb298286c'
     }
   },
@@ -206,12 +215,29 @@ export default {
         marker.addListener('click', () => {
           //console.log("content string ", contentString);
           this.dialog_detail = contentString;
-          this.dialog_title = type;
-          this.dialog = true;
+          this.dialog_title = type;          
           this.dialog_image_url = img;
           this.dialog_key = key;
           this.dialog_uid = uid;
-          // infowindow.open(map, marker);
+          let uid = store.state.user.uid;
+          var curObj = this;
+
+          if (uid && uid != '') {
+              let usersFavRef = firebase.database().ref();
+              usersFavRef.child('helpmepets_favorite').orderByChild("helpmepets_key").equalTo(key).on('value', function(snapshot) {
+                console.log("check helpmepets_favorite",snapshot.val());  
+                if (snapshot.val()!=null) {
+                  curObj.dialog_favAlready = true;
+
+                }
+                else {
+                  curObj.dialog_favAlready = false;
+                }
+                console.log('curObj', curObj);
+              });
+              this.dialog = true; 
+          }
+          
         });
     },
 

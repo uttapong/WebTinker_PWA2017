@@ -1,57 +1,64 @@
 <template>
-<div id="nearby">
-   <v-alert success  v-model="alert_success">
-    Success, Insert data.
-  </v-alert>
-
-  <v-alert error  v-model="alert_error">
-    Error, Please check data again.
-  </v-alert>
-  <div id="map"></div>
-  <!-- support only mobile web screen only. -->
-   <v-layout row justify-center>
-    <v-dialog v-model="dialog" fullscreen transition="v-dialog-bottom-transition" :overlay=false>
-      <v-card>
-        <v-card-row>
-          <v-toolbar class="orange" light>
-            <v-btn icon="icon" @click.native="dialog = false" light>
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>{{ dialog_title }}</v-toolbar-title>
-
-            <v-btn v-if="dialog_favAlready == false" flat @click.native="addFav({dialog_key})" :loading="loadingFlag" :disabled="loadingFlag" class="btn--dark orange white--text text--lighten-2">
-                <v-icon>
-                    favorite
-                </v-icon>
-            </v-btn>
-
-            <v-btn v-if="dialog_favAlready == true" flat  :disabled="true" class="btn--dark orange darken-4 white--text text--lighten-2">
-                <v-icon>
-                    favorite
-                </v-icon>
-            </v-btn>
-
-          </v-toolbar>
-        </v-card-row> 
-        <v-layout row wrap>
-          <v-flex xs10 offset-xs1>
-            
-                <img class="dialog_img"  v-bind:src="dialog_image_url">
-          </v-flex>
-          <v-flex xs10 offset-xs1>
-           
-              <v-card-text class="detail">{{ dialog_detail }}</v-card-text>
-            
-          </v-flex>
+    <div id="nearby">
+        <v-alert success="" v-model="alert_success">
+            Success, Insert data.
+        </v-alert>
+        <v-alert error="" v-model="alert_error">
+            Error, Please check data again.
+        </v-alert>
+        <div id="map">
+        </div>
+        <!-- support only mobile web screen only. -->
+        <v-layout row justify-center>
+            <v-dialog :overlay="false" fullscreen="" transition="v-dialog-bottom-transition" v-model="dialog">
+                <v-card>
+                    <v-card-row>
+                        <v-toolbar class="orange" light="">
+                            <v-btn @click.native="dialog = false" icon="icon" light="">
+                                <v-icon>
+                                    close
+                                </v-icon>
+                            </v-btn>
+                            <v-toolbar-title>
+                                {{ dialog_title }}
+                            </v-toolbar-title>
+                            <v-btn :disabled="loadingFlag" :loading="loadingFlag" @click.native="addFav({dialog_key})" class="btn--dark orange white--text text--lighten-2" flat="" v-if="dialog_favAlready == false">
+                                <v-icon>
+                                    favorite
+                                </v-icon>
+                            </v-btn>
+                            <v-btn :disabled="true" class="btn--dark orange darken-4 white--text text--lighten-2" flat="" v-if="dialog_favAlready == true">
+                                <v-icon>
+                                    favorite
+                                </v-icon>
+                            </v-btn>
+                            <v-btn class="btn--white white--text" flat="" @click.native="share">
+                                <v-icon>
+                                    share
+                                </v-icon>
+                            </v-btn>
+                        </v-toolbar>
+                    </v-card-row>
+                    <v-layout row="" wrap="">
+                        <v-flex xs12="">
+                            <img class="dialog_img" v-bind:src="dialog_image_url">
+                            </img>
+                        </v-flex>
+                        <v-flex xs12="">
+                            <v-flex class="text-xs-center" xs10="">
+                                <v-card-text class="detail">
+                                    {{ dialog_detail }}
+                                </v-card-text>
+                            </v-flex>
+                        </v-flex>
+                    </v-layout>
+                </v-card>
+            </v-dialog>
         </v-layout>
-      </v-card>
-    </v-dialog>
-  </v-layout>
-
-</div>
+    </div>
 </template>
 <script>
-import {firebase} from '../assets/js/FirebaseConfig'
+    import {firebase} from '../assets/js/FirebaseConfig'
 import {store} from '../vuex/store'
 import moment from 'moment'
 var format = require('string-format')
@@ -205,6 +212,7 @@ export default {
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
+
         var marker = new google.maps.Marker({
           position: position,
           map: map,
@@ -228,7 +236,6 @@ export default {
                 console.log("check helpmepets_favorite",snapshot.val());  
                 if (snapshot.val()!=null) {
                   curObj.dialog_favAlready = true;
-
                 }
                 else {
                   curObj.dialog_favAlready = false;
@@ -236,8 +243,17 @@ export default {
                 console.log('curObj', curObj);
               });
           }
-          this.dialog = true; 
+          this.dialog = true;
+          this.shareTitle = this.getshareTitle(type);
+          this.shareText = ''; 
         });
+    },
+
+    getshareTitle: function(animalType) {
+      if (type.toLowerCase() === "cat") {
+          return 'มีแมวหลง';
+      }
+      return 'มีหมาหลง';
     },
 
     getIconURL: function(type) {
@@ -271,15 +287,22 @@ export default {
         // default position.
         console.log("handleLocationError");
         this.makeMap({lat: 13.770626, lng: 100.5760677})
-      }
+    },
 
+    share: function() {
+      navigator.share({
+          title: this.shareTitle,
+          text: this.shareText,
+          url: window.location.href
+      }).then(() => console.log('Successful share'))
+      .catch(error => console.log('Error sharing:', error));
+    }
   }
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
+<style scoped="">
+    h1, h2 {
     font-weight: normal;
   }
 
@@ -313,7 +336,6 @@ export default {
     .dialog_img {
       min-height: 250px;
       width:100%;
-      border-radius: 10px;
     }
 
     #columns {

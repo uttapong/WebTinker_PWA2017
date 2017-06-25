@@ -17,7 +17,7 @@
                             {{ dialog_title }}
                         </v-card-title>
                     </v-card-row>
-                    <v-card-row>
+                    <v-card-row class="img-container">
                         <img class="dialog_img" v-bind:src="dialog_image_url">
                         </img>
                     </v-card-row>
@@ -43,7 +43,7 @@
                             </v-icon>
                         </v-btn>
                         <v-btn @click.native="dialog = false" class="green--text darken-1" flat="flat">
-                            ปิด
+                            CLOSE
                         </v-btn>
                     </v-card-row>
                 </v-card>
@@ -360,5 +360,8 @@ export default {
       -moz-background-size: cover;
       -o-background-size: cover;
       background-size: cover;
+     }
+     .dialog .img-container{
+        padding: 15px;
      }
 </style>

@@ -12,6 +12,11 @@
                         home
                     </v-icon>
                 </v-btn>-->
+                <v-btn @click.native="gotoAbout" icon="">
+                    <v-icon>
+                        help
+                    </v-icon>
+                </v-btn>
                 <template v-if="this.user">
                     <v-btn @click.native="gotoRegisPets" icon="">
                         <v-icon>
@@ -36,6 +41,7 @@
                         </v-icon>
                     </v-btn>
                 </template>
+                
             </v-toolbar>
             <main>
                 <v-container fluid="">
@@ -70,6 +76,11 @@ export default {
     gotoLogin: function () {
       console.log('gotoLogin');
       this.$router.push('/signin');
+    },
+
+    gotoAbout: function () {
+      console.log('gotoAbout');
+      this.$router.push('/about');
     },
     signOut() {
         firebase.auth().signOut();

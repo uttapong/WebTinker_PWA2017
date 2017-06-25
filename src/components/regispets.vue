@@ -154,7 +154,7 @@ export default {
   methods: {
     goToHome(){
       this.dialog = false;
-      this.$router.push('/');
+      // this.$router.push('/');
     },
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;

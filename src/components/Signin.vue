@@ -11,11 +11,11 @@
                   Facebook
               </v-btn>
           </div>
-          <div class="text-xs-center">
+          <!--<div class="text-xs-center">
               <v-btn @click.native='signIn("google")' large class="red darken-2" light="" round="">
                    Google 
               </v-btn>
-          </div>
+          </div>-->
       </div>
 </template>
 <script>

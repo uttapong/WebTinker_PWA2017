@@ -203,7 +203,9 @@ import {store} from '@/vuex/store'
     created:function(){
         this.getDevices()
         // console.log(this.devices)
-        this.currentDevice=this.devices[0]
+        if(this.devices[1])this.currentDevice=this.devices[1]
+        else this.currentDevice=this.devices[0]
+        
         this.selectDevice(this.currentDevice)
         // navigator.mediaDevices.getUserMedia({video: true}).then(this.getMedia).catch(this.failedToGetMedia);
         

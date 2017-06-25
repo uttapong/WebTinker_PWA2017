@@ -9,49 +9,46 @@
         <div id="map">
         </div>
         <!-- support only mobile web screen only. -->
-        <v-layout row justify-center>
-            <v-dialog :overlay="false" fullscreen="" transition="v-dialog-bottom-transition" v-model="dialog">
+        <v-layout justify-center="" row="">
+            <v-dialog v-model="dialog">
+                <v-btn light="" primary="" slot="activator">
+                    Open Dialog
+                </v-btn>
                 <v-card>
                     <v-card-row>
-                        <v-toolbar class="orange" light="">
-                            <v-btn @click.native="dialog = false" icon="icon" light="">
-                                <v-icon>
-                                    close
-                                </v-icon>
-                            </v-btn>
-                            <v-toolbar-title>
-                                {{ dialog_title }}
-                            </v-toolbar-title>
-                            <v-btn :disabled="loadingFlag" :loading="loadingFlag" @click.native="addFav({dialog_key})" class="btn--dark orange white--text text--lighten-2" flat="" v-if="dialog_favAlready == false">
-                                <v-icon>
-                                    favorite
-                                </v-icon>
-                            </v-btn>
-                            <v-btn :disabled="true" class="btn--dark orange darken-4 white--text text--lighten-2" flat="" v-if="dialog_favAlready == true">
-                                <v-icon>
-                                    favorite
-                                </v-icon>
-                            </v-btn>
-                            <v-btn class="btn--white white--text" flat="" @click.native="share">
-                                <v-icon>
-                                    share
-                                </v-icon>
-                            </v-btn>
-                        </v-toolbar>
+                        <v-card-title>
+                            {{ dialog_title }}
+                        </v-card-title>
                     </v-card-row>
-                    <v-layout row="" wrap="">
-                        <v-flex xs12="">
-                            <img class="dialog_img" v-bind:src="dialog_image_url">
-                            </img>
-                        </v-flex>
-                        <v-flex xs12="">
-                            <v-flex class="text-xs-center" xs10="">
-                                <v-card-text class="detail">
-                                    {{ dialog_detail }}
-                                </v-card-text>
-                            </v-flex>
-                        </v-flex>
-                    </v-layout>
+                    <v-card-row>
+                        <img class="dialog_img" v-bind:src="dialog_image_url">
+                        </img>
+                    </v-card-row>
+                    <v-card-row>
+                        <v-card-text>
+                            {{ dialog_detail }}
+                        </v-card-text>
+                    </v-card-row>
+                    <v-card-row actions="">
+                        <v-btn @click.native="" class="green--text darken-1" flat="flat">
+                            <v-icon>
+                                share
+                            </v-icon>
+                        </v-btn>
+                        <v-btn :disabled="loadingFlag" :loading="loadingFlag" @click.native="addFav({dialog_key})" class="btn--dark orange white--text text--lighten-2" flat="" v-if="dialog_favAlready == false">
+                            <v-icon>
+                                favorite
+                            </v-icon>
+                        </v-btn>
+                        <v-btn :disabled="true" class="btn--dark orange darken-4 white--text text--lighten-2" flat="" v-if="dialog_favAlready == true">
+                            <v-icon>
+                                favorite
+                            </v-icon>
+                        </v-btn>
+                        <v-btn @click.native="dialog = false" class="green--text darken-1" flat="flat">
+                            ปิด
+                        </v-btn>
+                    </v-card-row>
                 </v-card>
             </v-dialog>
         </v-layout>
@@ -336,6 +333,7 @@ export default {
     .dialog_img {
       min-height: 250px;
       width:100%;
+      border-radius: 10px;
     }
 
     #columns {
@@ -359,11 +357,11 @@ export default {
       border-radius: 20px;
     }
 
-     .dialog .card{
- background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
- -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
- }
+    .dialog .card{
+     /*background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;*/
+     -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+     }
 </style>

@@ -1,7 +1,24 @@
 <template>
   <div id="resgister">
+    <v-layout row justify-center>
+    <v-dialog v-model="dialog">
+      
+      <v-card>
+        <v-card-row>
+          <v-card-title>Photo posted</v-card-title>
+        </v-card-row>
+        <v-card-row>
+          <v-card-text>Thank you for your love, this post would definitely help us.</v-card-text>
+        </v-card-row>
+        <v-card-row actions>
+          <v-btn class="green--text darken-1" flat="flat" @click.native="goToHome">OK</v-btn>
+        </v-card-row>
+      </v-card>
+    </v-dialog>
+  </v-layout>
+
         <v-alert success  v-model="alert_success">
-          Success, Insert data.
+          Your animal'photo has been posted.
         </v-alert>
 
         <v-alert error  v-model="alert_error">
@@ -108,6 +125,7 @@ export default {
   store,
   data () {
     return {
+      dialog: false,
       drawer: true,
       drawerRight: true,
       right: null,
@@ -159,6 +177,10 @@ export default {
 
   },
   methods: {
+    goToHome(){
+      this.dialog = false;
+      this.$router.push('/');
+    },
      onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length)
@@ -269,6 +291,8 @@ export default {
     },
 
     handleUpdated: function() {
+      this.clearPhoto()
+      this.dialog=true;
       this.alert_success = true
       this.loading3 = false
     },

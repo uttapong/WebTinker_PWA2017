@@ -80,6 +80,7 @@ export default {
     this.handleCache();
     this.getCurrentLocation();
     this.initialMap();
+
   },
 
   methods: {
@@ -294,7 +295,7 @@ export default {
         method: 'share_open_graph',
         action_type: 'og.likes',
         action_properties: JSON.stringify({
-            object:'https://developers.facebook.com/docs/',
+            object:window.location.href,
         })
       }, function(response){});
     }

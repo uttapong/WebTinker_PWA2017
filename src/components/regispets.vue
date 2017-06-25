@@ -282,6 +282,9 @@ export default {
 <style scoped>
 #resgister{
   padding: 0px 20px;
+
+      min-height: calc(100vh - 56px - 56px)!important;
+      margin: -10px;
 }
 .type-image{
   height: 64px;

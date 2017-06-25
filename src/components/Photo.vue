@@ -64,13 +64,6 @@ import {store} from '@/vuex/store'
         currentDevice:''
       }
     },
-    watch: {
-    currentDevice: function (newDevice) {
-      // `this` points to the vm instance
-      if(this.currentDevice!=newDevice)this.selectDevice(this.newDevice)
-    }
-
-  },
   computed: {
     show_switch: function () {
       // `this` points to the vm instance
@@ -136,7 +129,7 @@ import {store} from '@/vuex/store'
       },
       processFrame(imageBitmap){
         console.log(imageBitmap.height)
-         let fixHeight=480;
+         let fixHeight=360;
         document.getElementById('photo').width = imageBitmap.width;
         document.getElementById('photo').height = fixHeight;
         let margin=0;
@@ -190,8 +183,18 @@ import {store} from '@/vuex/store'
         navigator.mediaDevices.getUserMedia(constraints).then(this.getMedia).catch(this.failedToGetMedia);
       },
       switchDevice(){
-        if(this.currentDevice==this.devices[0])this.currentDevice=this.devices[1]
-        else this.currentDevice=this.devices[0]
+        console.log('switch device')
+        if(this.devices.length>1){
+          if(this.currentDevice==this.devices[0]){
+            this.currentDevice=this.devices[1]
+          }
+          else {
+            this.currentDevice=this.devices[0]
+          }
+          console.log(this.currentDevice)
+          this.stopCamera()
+          this.selectDevice(this.currentDevice)
+        }
       }
       // captureDevice.takePhoto().then(processPhoto).catch(error => {
       //   err((new Date()).toISOString(), 'Error while taking photo:', error);
@@ -212,6 +215,10 @@ import {store} from '@/vuex/store'
   }
 </script>
 <style scoped>
+.capture {
+      min-height: calc(100vh - 56px - 56px)!important;
+      margin: -10px;
+    }
 #photo{
  
   width: 100%;
@@ -219,9 +226,7 @@ import {store} from '@/vuex/store'
 .x-large{
   width: 100px;
   height: 100px;
-  font-size: 
 }
-
 .x-large .icon{
   font-size: 48px;
   height: 48px;

@@ -324,7 +324,7 @@ export default {
      * element that contains the map. */
     #map {
       min-height: calc(100vh - 56px - 56px)!important;
-      margin: -16px;
+      margin: -20px;
     }
 
     .container container--fluid {

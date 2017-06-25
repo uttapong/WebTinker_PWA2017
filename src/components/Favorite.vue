@@ -187,4 +187,10 @@ export default {
   -o-background-size: cover;
   background-size: cover;
  }
+ #FavoritePage{
+  
+      min-height: calc(100vh - 56px - 56px)!important;
+      margin: -10px;
+    
+ }
 </style>

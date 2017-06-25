@@ -31,7 +31,7 @@
     <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
   </head>
   <body>
-    <div id="app">This is your fallback content in case JavaScript fails to load.</div>
+    <div id="app"><div style="width: 100%; text-align:center;margin-top: 100px;"><img style="width: 64px;" src="/static/img/heart.gif"></img></div></div>
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
     <!-- built files will be auto injected -->

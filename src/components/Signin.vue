@@ -5,6 +5,7 @@
                   Sign In
               </h2>
           </div>
+          
           <!--<div class="text-xs-center">
               <v-btn @click.native='signIn("fb")' large class="indigo"  light="" round="">
                   Facebook
@@ -24,18 +25,24 @@ export default {
   name: 'signin',
   data () {
     return {}
-  },
-  created: function(){
-    let uid = (store.state.user!=null)?store.state.user.uid:null;
-    if (uid!=null && uid != '') {
-      this.$router.push('/');
-    }
-    else {
+  }, 
 
-    }
-  },
-
+  created: function(){   
+    //this.checkLoginYet();
+    var thisObj = this;
+    setTimeout(function() {
+      thisObj.checkLoginYet();
+    },3000);
+  }, 
   methods: {
+      checkLoginYet() {
+        let uid = (store.state.user!=null)?store.state.user.uid:null;
+        console.log("created sing in event fire uid: ",uid);
+        if (uid!=null && uid != '') {
+          this.$router.push('/');
+        }
+      },
+
       signIn(type) {
           var loginType = type;
           firebase.auth().getRedirectResult().then((result) => {
@@ -63,6 +70,9 @@ export default {
             }
             // The signed-in user info.
             let user = result.user;
+            if(user) {
+              this.$router.push('/');
+            }
           }).catch(function (error) {
             // Handle Errors here.
             let errorCode = error.code;
@@ -83,7 +93,7 @@ export default {
           });
 
       },
-      /*+
+    
       fbSignIn() {
         firebase.auth().getRedirectResult().then((result) => {
           console.log(result)
@@ -99,6 +109,9 @@ export default {
           }
           // The signed-in user info.
           let user = result.user;
+          if(user) {
+            this.$router.push('/');
+          }
         }).catch(function (error) {
           // Handle Errors here.
           let errorCode = error.code;
@@ -119,7 +132,7 @@ export default {
         });
 
       },
-      */
+      
       toggleSignIn(provider){
         if (!firebase.auth().currentUser) {
          
@@ -129,7 +142,9 @@ export default {
             // The signed-in user info.
             var user = result.user;
             // console.log('fb user returned')
-            if(user)this.$router.push('/');
+            if(user) {
+              this.$router.push('/');
+            }
 
           }).catch(function (error) {
             // Handle Errors here.

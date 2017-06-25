@@ -52,7 +52,7 @@
     </div>
 </template>
 <script>
-    import {firebase} from '../assets/js/FirebaseConfig'
+import {firebase} from '../assets/js/FirebaseConfig'
 import {store} from '../vuex/store'
 import moment from 'moment'
 var format = require('string-format')

@@ -9,7 +9,7 @@
         <div id="map">
         </div>
         <!-- support only mobile web screen only. -->
-        <v-layout row justify-center>
+        <v-layout justify-center="" row="">
             <v-dialog :overlay="false" fullscreen="" transition="v-dialog-bottom-transition" v-model="dialog">
                 <v-card>
                     <v-card-row>
@@ -32,7 +32,7 @@
                                     favorite
                                 </v-icon>
                             </v-btn>
-                            <v-btn class="btn--white white--text" flat="" @click.native="share">
+                            <v-btn @click.native="share" class="btn--white white--text" flat="">
                                 <v-icon>
                                     share
                                 </v-icon>
@@ -40,11 +40,11 @@
                         </v-toolbar>
                     </v-card-row>
                     <v-layout row="" wrap="">
-                        <v-flex xs12="">
+                        <v-flex xs10 offset-xs1>    
                             <img class="dialog_img" v-bind:src="dialog_image_url">
                             </img>
                         </v-flex>
-                        <v-flex xs12="">
+                        <v-flex xs10 offset-xs1>
                             <v-flex class="text-xs-center" xs10="">
                                 <v-card-text class="detail">
                                     {{ dialog_detail }}
@@ -336,6 +336,7 @@ export default {
     .dialog_img {
       min-height: 250px;
       width:100%;
+      border-radius: 10px;
     }
 
     #columns {
@@ -359,11 +360,11 @@ export default {
       border-radius: 20px;
     }
 
-     .dialog .card{
- background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
- -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
- }
+    .dialog .card{
+     background: #FFE5B6 url('/static/img/bg_light.png') no-repeat center center fixed !important;
+     -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+     }
 </style>

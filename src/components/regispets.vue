@@ -1,84 +1,68 @@
 <template>
-  <div id="resgister">
-    <v-layout row justify-center>
-    <v-dialog v-model="dialog">
-      
-      <v-card>
-        <v-card-row>
-          <v-card-title>Photo posted</v-card-title>
-        </v-card-row>
-        <v-card-row>
-          <v-card-text>Thank you for your love, this post would definitely help us.</v-card-text>
-        </v-card-row>
-        <v-card-row actions>
-          <v-btn class="green--text darken-1" flat="flat" @click.native="goToHome">OK</v-btn>
-        </v-card-row>
-      </v-card>
-    </v-dialog>
-  </v-layout>
-
-        <v-alert success  v-model="alert_success">
-          Your animal'photo has been posted.
+    <div id="resgister">
+        <v-layout justify-center="" row="">
+            <v-dialog v-model="dialog">
+                <v-card>
+                    <v-card-row>
+                        <v-card-title>
+                            Photo posted
+                        </v-card-title>
+                    </v-card-row>
+                    <v-card-row>
+                        <v-card-text>
+                            Thank you for your love, this post would definitely help us.
+                        </v-card-text>
+                    </v-card-row>
+                    <v-card-row actions="">
+                        <v-btn @click.native="goToHome" class="green--text darken-1" flat="flat">
+                            OK
+                        </v-btn>
+                    </v-card-row>
+                </v-card>
+            </v-dialog>
+        </v-layout>
+        <v-alert success="" v-model="alert_success">
+            Your animal'photo has been posted.
         </v-alert>
-
-        <v-alert error  v-model="alert_error">
-          Error, Please check data again.
+        <v-alert error="" v-model="alert_error">
+            Error, Please check data again.
         </v-alert>
-
-     <v-layout row>
-     
-        <v-flex xs6>
-            <v-subheader><img class="type-image" :src="selectImage"></img></v-subheader>
-         </v-flex>
-        <v-flex xs6 order-xs2>
-          <v-select
-              v-bind:items="items"
-              v-model="selectType"
-              dark
-              item-value="text"
-            ></v-select>
-        </v-flex>
-
-
-      </v-layout>
-      <v-layout row>
-        
-        <v-flex xs12 order-xs2>
-          <v-text-field
-              name="input-7-1"
-              multi-line
-              v-model="detail"
-              id="detail"
-              hint="How animal(s) look like or how pity they are?"
-              placeholder="Founded animal(s) description"
-            ></v-text-field>
-        </v-flex>
-
-
-      </v-layout>
-    <v-layout row>
-        
-   
-        <v-flex xs12 order-xs2>
-          <!--<input type="file" accept="image/*" capture="camera" id="imageUrl" @change="onFileChange"  />
+        <v-layout row="">
+            <v-flex xs6="">
+                <v-subheader>
+                    <img :src="selectImage" class="type-image"/>
+                </v-subheader>
+            </v-flex>
+            <v-flex order-xs2="" xs6="">
+                <v-select dark="" item-value="text" v-bind:items="items" v-model="selectType">
+                </v-select>
+            </v-flex>
+        </v-layout>
+        <v-layout row="">
+            <v-flex order-xs2="" xs12="">
+                <v-text-field hint="How animal(s) look like or how pity they are?" id="detail" multi-line="" name="input-7-1" placeholder="Founded animal(s) description" v-model="detail">
+                </v-text-field>
+            </v-flex>
+        </v-layout>
+        <v-layout row="">
+            <v-flex order-xs2="" xs12="">
+                <!--<input type="file" accept="image/*" capture="camera" id="imageUrl" @change="onFileChange"  />
             <img id="frame"><br/>-->
-            <input v-if="imageUrl == ''" type="file" name="imageUrl" class="file-upload" id="imageUrl" accept="image/*" @change="onFileChange" >
-      
-            <template v-if="imageUrl">
-            <img  class="upload-preview" v-bind:src="imageUrl"/>
-            <v-btn icon class="white--text deep-orange"  @click.native="clearPhoto">
-              <v-icon>clear</v-icon>
-            </v-btn>
-            </template>
-
-        </v-flex>
-    </v-layout>
-    
-   
-
-      <v-layout row>
-        <v-flex xs12 order-xs2>
-          <!--<v-btn
+                <input @change="onFileChange" accept="image/*" class="file-upload" id="imageUrl" name="imageUrl" type="file" v-if="imageUrl == ''">
+                    <template v-if="imageUrl">
+                        <img class="upload-preview" v-bind:src="imageUrl"/>
+                        <v-btn @click.native="clearPhoto" class="white--text deep-orange" icon="">
+                            <v-icon>
+                                clear
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                </input>
+            </v-flex>
+        </v-layout>
+        <v-layout row="">
+            <v-flex order-xs2="" xs12="">
+                <!--<v-btn
             light
             secondary
             :loading="loading"
@@ -87,33 +71,24 @@
           >
             Accept Terms|submitform
           </v-btn> -->
-          <v-card-text>
-          <div>
-          <v-btn 
-          large
-          class="deep-orange" 
-          light 
-          round
-          :loading="loading3"
-          @click.native="submitform"
-          :disabled="loading3"
-          ><v-icon left light>favorite</v-icon> Help this animal</v-btn>
-         </div>
-         </v-card-text>
-
-         
-        </v-flex>
-      </v-layout>
-  </div>
-  
-  
+                <v-card-text>
+                    <div>
+                        <v-btn :disabled="loading3" :loading="loading3" @click.native="submitform" class="deep-orange" large="" light="" round="">
+                            <v-icon left="" light="">
+                                favorite
+                            </v-icon>
+                            Help this animal
+                        </v-btn>
+                    </div>
+                </v-card-text>
+            </v-flex>
+        </v-layout>
+    </div>
 </template>
-
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw&callback=initMap">
+<script async="" defer="" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9_ksgcjjKLkpQZUdKsY9Djm7nkJjx2uw&callback=initMap">
 </script>
 <script>
-import Vue from 'vue'
+    import Vue from 'vue'
 import Vuetify from 'vuetify'
 import {firebase} from '../assets/js/FirebaseConfig'
 import {store} from '../vuex/store'
@@ -304,10 +279,9 @@ export default {
   }
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#resgister{
+<style scoped="">
+    #resgister{
   padding: 0px 20px;
 
       min-height: calc(100vh - 56px - 56px)!important;

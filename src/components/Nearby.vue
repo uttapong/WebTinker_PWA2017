@@ -28,9 +28,7 @@
                     </v-card-row>
                     <v-card-row actions="">
                         <v-btn @click.native="share" class="green--text darken-1" flat="flat">
-                            <network network="facebook">
-                                <i class="fa fa-facebook"></i>
-                            </network>
+                          <i class="fa fa-facebook"></i>
                         </v-btn>
                         <v-btn :disabled="loadingFlag" :loading="loadingFlag" @click.native="addFav({dialog_key})" class="btn--dark orange white--text text--lighten-2" flat="" v-if="dialog_favAlready == false">
                             <v-icon>
@@ -56,7 +54,6 @@ import {firebase} from '../assets/js/FirebaseConfig'
 import {store} from '../vuex/store'
 import moment from 'moment'
 var format = require('string-format')
-var SocialSharing = require('vue-social-sharing');
 
 export default {
   name: 'nearby',

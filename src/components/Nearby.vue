@@ -52,14 +52,10 @@ export default {
   name: 'nearby',
   data () {
     return {
-        drawer: true,
-        drawerRight: true,
-        right: null,
-        left: null,
-        dialog: false,
         loadingFlag: false,  
         alert_success: false,
         alert_error: false,
+        dialog: false,
         dialog_detail: "",
         dialog_title: "",
         dialog_key: "",

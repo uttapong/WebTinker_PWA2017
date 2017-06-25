@@ -7,11 +7,11 @@
                 </v-toolbar-title>
                 <v-spacer>
                 </v-spacer>
-                <v-btn @click.native="gotoHome" icon="">
+                <!--<v-btn @click.native="gotoHome" icon="">
                     <v-icon>
                         home
                     </v-icon>
-                </v-btn>
+                </v-btn>-->
                 <template v-if="this.user">
                     <v-btn @click.native="gotoRegisPets" icon="">
                         <v-icon>

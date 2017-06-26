@@ -45,31 +45,33 @@ export default {
 
       signIn(type) {
           var loginType = type;
-          firebase.auth().getRedirectResult().then((result) => {
+          var provider;
+          if(loginType=='fb') {
+            provider= new firebase.auth.FacebookAuthProvider();
+          }
+          else {
+            provider = new firebase.auth.GoogleAuthProvider();
+          }
+          firebase.auth().signInWithRedirect(provider).then((result) => {
             console.log("signIn result: ",result)
             if (result.credential) {
               // This gives you a Facebook Access Token. You can use it to access the Facebook API.
               let token = result.credential.accessToken;
               // [START_EXCLUDE]
-              console.log('Current token: ',token)
+              console.log('Current token: ',token);
+              let user = result.user;
             } else {
               //console.log("get token error");
               // [END_EXCLUDE]
               console.log("loginType is ", loginType);
-              var provider;
-              if(loginType=='fb') {
-                provider= new firebase.auth.FacebookAuthProvider();
-              }
-              else {
-                provider = new firebase.auth.GoogleAuthProvider();
-              }
+              
               provider.addScope('profile');
               provider.addScope('email');
 
               this.toggleSignIn(provider)
             }
             // The signed-in user info.
-            let user = result.user;
+            
             // if(user) {
             //   this.$router.push('/');
             // }
@@ -94,44 +96,6 @@ export default {
 
       },
     
-      fbSignIn() {
-        firebase.auth().getRedirectResult().then((result) => {
-          console.log(result)
-          if (result.credential) {
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            let token = result.credential.accessToken;
-            // [START_EXCLUDE]
-            console.log(token)
-          } else {
-            console.log("get token error");
-            // [END_EXCLUDE]
-            this.toggleSignIn()
-          }
-          // The signed-in user info.
-          let user = result.user;
-          // if(user) {
-          //   this.$router.push('/');
-          // }
-        }).catch(function (error) {
-          // Handle Errors here.
-          let errorCode = error.code;
-          let errorMessage = error.message;
-          // The email of the user's account used.
-          let email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          let credential = error.credential;
-          // [START_EXCLUDE]
-          if (errorCode === 'auth/account-exists-with-different-credential') {
-            alert('You have already signed up with a different auth provider for that email.');
-            // If you are using multiple auth providers on your app you should handle linking
-            // the user's accounts here.
-          } else {
-            console.error(error);
-          }
-          // [END_EXCLUDE]
-        });
-
-      },
       
       toggleSignIn(provider){
         if (!firebase.auth().currentUser) {

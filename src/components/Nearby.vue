@@ -10,7 +10,7 @@
         </div>
         <!-- support only mobile web screen only. -->
         <v-layout justify-center="" row="">
-            <v-dialog v-model="dialog">
+            <v-dialog v-model="openDialog">
                 <v-card>
                     <v-card-row>
                         <v-card-title>
@@ -40,7 +40,7 @@
                                 favorite
                             </v-icon>
                         </v-btn>
-                        <v-btn @click.native="dialog = false" class="green--text darken-1" flat="flat">
+                        <v-btn @click.native="openDialog = false" class="green--text darken-1" flat="flat">
                             CLOSE
                         </v-btn>
                     </v-card-row>
@@ -64,7 +64,7 @@ export default {
         loadingFlag: false,  
         alert_success: false,
         alert_error: false,
-        dialog: false,
+        openDialog: false,
         dialog_detail: "",
         dialog_title: "",
         dialog_key: "",
@@ -207,7 +207,7 @@ export default {
         var infowindow = new google.maps.InfoWindow({
           content: contentString
         });
-
+        var objThis = this;
         var marker = new google.maps.Marker({
           position: position,
           map: map,
@@ -215,34 +215,46 @@ export default {
           icon: this.getIconURL(type)
         });
 
-        marker.addListener('click', () => {
-          //console.log("content string ", contentString);
-          this.dialog_detail = contentString;
-          this.dialog_title = type;          
-          this.dialog_image_url = img;
-          this.dialog_key = key;
-          this.dialog_uid = uid;
-          console.log(store.state.user);
-          let uid = (store.state.user!=null)?store.state.user.uid:null;
-          var curObj = this;
 
-          if (uid && uid != '') {
-              let usersFavRef = firebase.database().ref();
-              usersFavRef.child('helpmepets_favorite').orderByChild("helpmepets_key").equalTo(key).on('value', function(snapshot) {
-                console.log("check helpmepets_favorite",snapshot.val());  
-                if (snapshot.val()!=null) {
-                  curObj.dialog_favAlready = true;
-                }
-                else {
-                  curObj.dialog_favAlready = false;
-                }
-                console.log('curObj', curObj);
-              });
-          }
-          this.dialog = true;
-          this.shareTitle = this.getshareTitle(type);
-          this.shareText = ''; 
+        google.maps.event.addListener(marker, "click", function() {
+            objThis.dialog_detail = contentString;
+            objThis.dialog_title = type;          
+            objThis.dialog_image_url = img;
+            objThis.dialog_key = key;
+            objThis.dialog_uid = uid;
+            objThis.dialog_favAlready = false;
+            //console.log("google.maps.event.addListener click ", store.state.user);
+            let uid = (store.state.user!=null)?store.state.user.uid:null;
+            // var curObj = this;
+
+            // if (uid && uid != '') {
+            //     let usersFavRef = firebase.database().ref();
+            //     usersFavRef.child('helpmepets_favorite').orderByChild("helpmepets_key").equalTo(key).on('value', function(snapshot) {
+            //       console.log("check helpmepets_favorite",snapshot.val());  
+            //       if (snapshot.val()!=null) {
+            //         curObj.dialog_favAlready = true;
+            //       }
+            //       else {
+            //         curObj.dialog_favAlready = false;
+            //       }
+            //       console.log('curObj', curObj);
+            //     });
+            // }
+            //console.log("this.openDialog ", objThis.openDialog);
+            objThis.openDialog = true;
+            // setTimeout(function() {
+            //   objThis.openDialog = true;
+            // }, 500);
+            // this.shareTitle = this.getshareTitle(type);
+            this.shareText = '';
+        
+            // actually stops the event from bubbling up to the map or the document
+            event.preventDefault();
         });
+        // marker.addListener('click', () => {
+        //   //console.log("content string ", contentString);
+           
+        // });
     },
 
     getshareTitle: function(animalType) {

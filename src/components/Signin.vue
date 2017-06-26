@@ -26,23 +26,35 @@ export default {
   data () {
     return {}
   }, 
+  created: function(){
+    //console.log('init created Singin.vue');
+    firebase.auth().getRedirectResult().then(function(result) {             
+      // console.log("getRedirectResult result.credential ", result.credential);   
+      if (result.credential) {              
+        let token = result.credential.accessToken;             
+        // console.log('Current token: ',token);
+        
+      }    
+      var user = result.user;        
+    }).catch(function (error) {
+      // console.log('signIn signInWithRedirect fail: ');
+      // Handle Errors here.
+      let errorCode = error.code;
+      let errorMessage = error.message;            
+      let email = error.email;          
+      let credential = error.credential;
+      
+      if (errorCode === 'auth/account-exists-with-different-credential') {
+        alert('You have already signed up with a different auth provider for that email.');
+        // If you are using multiple auth providers on your app you should handle linking
+        // the user's accounts here.
+      } else {
+        console.error(error);
+      }            
+    });
 
-  created: function(){   
-    //this.checkLoginYet();
-    // var thisObj = this;
-    // setTimeout(function() {
-    //   thisObj.checkLoginYet();
-    // },3000);
   }, 
   methods: {
-      checkLoginYet() {
-        let uid = (store.state.user!=null)?store.state.user.uid:null;
-        console.log("created sing in event fire uid: ",uid);
-        if (uid!=null && uid != '') {
-          this.$router.push('/');
-        }
-      },
-
       signIn(type) {
           var loginType = type;
           var provider;
@@ -52,90 +64,18 @@ export default {
           else {
             provider = new firebase.auth.GoogleAuthProvider();
           }
-          firebase.auth().signInWithRedirect(provider).then((result) => {
-            console.log("signIn result: ",result)
-            if (result.credential) {
-              // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-              let token = result.credential.accessToken;
-              // [START_EXCLUDE]
-              console.log('Current token: ',token);
-              let user = result.user;
-            } else {
-              //console.log("get token error");
-              // [END_EXCLUDE]
-              console.log("loginType is ", loginType);
-              
-              provider.addScope('profile');
-              provider.addScope('email');
-
-              this.toggleSignIn(provider)
-            }
-            // The signed-in user info.
-            
-            // if(user) {
-            //   this.$router.push('/');
-            // }
-          }).catch(function (error) {
-            // Handle Errors here.
-            let errorCode = error.code;
-            let errorMessage = error.message;
-            // The email of the user's account used.
-            let email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            let credential = error.credential;
-            // [START_EXCLUDE]
-            if (errorCode === 'auth/account-exists-with-different-credential') {
-              alert('You have already signed up with a different auth provider for that email.');
-              // If you are using multiple auth providers on your app you should handle linking
-              // the user's accounts here.
-            } else {
-              console.error(error);
-            }
-            // [END_EXCLUDE]
-          });
-
+          // console.log('loginType: ',type);
+          firebase.auth().signInWithRedirect(provider);          
       },
     
-      
-      toggleSignIn(provider){
-        if (!firebase.auth().currentUser) {
-         
-          firebase.auth().signInWithRedirect(provider).then( (result)=> {
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            var token = result.credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
-            // console.log('fb user returned')
-            // if(user) {
-            //   this.$router.push('/');
-            // }
 
-          }).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // [START_EXCLUDE]
-            if (errorCode === 'auth/account-exists-with-different-credential') {
-              console.log('You have already signed up with a different auth provider for that email.');
-              // If you are using multiple auth providers on your app you should handle linking
-              // the user's accounts here.
-            } else {
-              console.error(error);
-            }
-            // [END_EXCLUDE]
-          });
-          // [END signin]
-        } else {
-          // [START signout]
+      toggleSignIn(provider){
+        if (firebase.auth().currentUser) {
+                         
           firebase.auth().signOut();
-          // [END signout]
+          
         }
-        // [START_EXCLUDE]
-        // document.getElementById('quickstart-sign-in').disabled = true;
+
 
       }
       

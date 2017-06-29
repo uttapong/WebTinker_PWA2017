@@ -1,24 +1,21 @@
-nguage: node_js
-
+language: node_js
 node_js:
-    - 6.10.3
-
-notifications:
-  email:
-    on_failure: change
-    on_success: change
+    - "6.10.3"
 
 branches:
   only:
     - master
 
-install:
-  - npm install
+before_script:
+  - npm install -g firebase-tools
 
 script:
   - npm run build
 
-
 after_success:
-  - firebase deploy --token  $FIREBASE_TOKEN
+  - firebase deploy --token $FIREBASE_TOKEN
 
+notifications:
+  email:
+    on_failure: change
+    on_success: change

@@ -13,7 +13,6 @@ branches:
     - master
 
 install:
-  - npm install -g firebase-tools 
   - npm install
 
 script:
